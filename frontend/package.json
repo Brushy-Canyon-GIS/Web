@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "@types/mapbox-gl": "^3.4.1",
+    "mapbox-gl": "^3.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.1"
+  }
+}

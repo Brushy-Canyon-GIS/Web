@@ -1,0 +1,42 @@
+# === Python / FastAPI ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+.env
+venv/
+env/
+venv/
+*.egg-info/
+instance/
+.DS_Store
+
+# === React / Node ===
+node_modules/
+build/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+
+# === IDE / OS files ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+Thumbs.db
+.DS_Store
+
+# === Other ===
+*.zip
+*.tar
+*.tar.gz
