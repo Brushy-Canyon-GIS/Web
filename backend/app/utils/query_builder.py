@@ -29,7 +29,7 @@ def build_geojson_query(
     
     # Build WHERE clause if filters provided
     if filters:
-        conditions, filter_params = build_filter_conditions(table_name, filters)
+        conditions, filter_params = build_filter_conditions(table_name, filters, geometry_column)
         where_conditions.extend(conditions)
         params.update(filter_params)
     
@@ -39,10 +39,10 @@ def build_geojson_query(
     
     # Build the property columns list
     if properties is None:
-        # Get all columns except geometry
-        properties_json = """
+        # Get all columns except geometry (using the actual geometry column name)
+        properties_json = f"""
             json_build_object(
-                'properties', row_to_json(t.*)::jsonb - 'geometry'
+                'properties', row_to_json(t.*)::jsonb - '{geometry_column}'
             )->'properties'
         """
     else:
@@ -79,7 +79,8 @@ def build_geojson_query(
 
 def build_filter_conditions(
     table_name: str,
-    filters: FilterParams
+    filters: FilterParams,
+    geometry_column: str = "geometry"
 ) -> Tuple[List[str], Dict[str, Any]]:
     """
     Build WHERE clause conditions and parameters from filter params.
@@ -87,6 +88,7 @@ def build_filter_conditions(
     Args:
         table_name: Name of the table being queried
         filters: Filter parameters
+        geometry_column: Name of the geometry column (default: "geometry")
         
     Returns:
         Tuple of (conditions_list, parameters_dict)
@@ -100,10 +102,10 @@ def build_filter_conditions(
             coords = [float(x.strip()) for x in filters.bbox.split(',')]
             if len(coords) == 4:
                 min_lng, min_lat, max_lng, max_lat = coords
-                # Use ST_Intersects with a bounding box
-                conditions.append("""
+                # Use ST_Intersects with a bounding box (using actual geometry column)
+                conditions.append(f"""
                     ST_Intersects(
-                        geometry,
+                        "{geometry_column}",
                         ST_MakeEnvelope(:min_lng, :min_lat, :max_lng, :max_lat, 4326)
                     )
                 """)

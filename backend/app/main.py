@@ -107,4 +107,12 @@ async def get_atlas_maps():
     FROM atlas_maps;
     """
     result = await database.fetch_one(query)
-    return result["geojson"]
+    
+    if result and result["geojson"]:
+        return result["geojson"]
+    
+    # Return empty FeatureCollection if no data
+    return {
+        "type": "FeatureCollection",
+        "features": []
+    }
