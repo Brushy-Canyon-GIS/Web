@@ -8,10 +8,16 @@ function App() {
  const [geojson, setGeojson] = useState<GeoJSON.FeatureCollection | undefined>();
 
   useEffect(() => {
-    // Fetch from Supabase endpoint that returns atlas_maps as GeoJSON
-    fetch("http://localhost:8000/") // your FastAPI endpoint
+    // Fetch atlas_maps data from the new API
+    // You can change the table name to visualize different datasets:
+    // - atlas_maps, fan_geology, faults, fieldtripstops, etc.
+    fetch("http://localhost:8000/api/v1/geologic/atlas_maps?limit=100")
       .then((res) => res.json())
-      .then((data) => {setGeojson(JSON.parse(data)); console.log(JSON.parse(data))});
+      .then((data) => {
+        setGeojson(data);
+        console.log("Loaded features:", data.features.length);
+      })
+      .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
   return <Map geojson={geojson} />;

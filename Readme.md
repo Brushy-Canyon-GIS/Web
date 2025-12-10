@@ -5,11 +5,17 @@ The project has 2 folders
 
 To start the backend:
 
-Open your terminal in the path backend 
-1. ./venv/Scripts/activate - this will activate the virtual env
-2. uvicorn app.main:app --reload 
+Open your terminal in the backend folder 
 
-These commands will run the backend 
+**On Mac/Linux:**
+1. `source venv/bin/activate` - activate the virtual environment
+2. `uvicorn app.main:app --reload` - start the server
+
+**On Windows:**
+1. `venv\Scripts\activate` - activate the virtual environment
+2. `uvicorn app.main:app --reload` - start the server
+
+The backend will be available at http://localhost:8000 
 
 2. Frontend - React + Vite code
 
