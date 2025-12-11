@@ -33,7 +33,7 @@ const SignUpForm: React.FC = () => {
     <div className="container">
       <div className="form-container">
         <form className="auth-form" onSubmit={handleSignup}>
-          <h2>Welcome</h2>
+          <h2>Sign Up</h2>
           <div className="inputs">
             <div className="input-div">
               <label htmlFor="email">Email:</label>

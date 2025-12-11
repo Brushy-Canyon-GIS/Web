@@ -17,16 +17,7 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <HomePage />,
-      },
-      {
-        element: <ProtectedRoute />,
-        children: [
-          {
-            path: '/dashboard',
-            element: <App />,
-          },
-        ],
-      },
+      }
     ],
   },
   {
@@ -36,7 +27,17 @@ const router = createBrowserRouter([
   {
     path: 'signup',
     element: <SignUpForm />
-  }
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: '/dashboard',
+        element: <App />,
+      },
+    ],
+  },
+
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

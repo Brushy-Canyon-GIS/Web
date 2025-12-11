@@ -20,6 +20,11 @@ const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const  NavBar = () => {
   const { user } = useAuth();
+  const roundedButtonStyle = {
+    borderRadius: "8px",
+    margin: "0 8px",
+    borderWidth: "2px"
+  }
 
   return (
     <AppBar position="fixed">
@@ -44,13 +49,13 @@ const  NavBar = () => {
           </Typography>
           {user ? (
           <>
-            <Button color="inherit" onClick={handleSignOut}>
+            <Button color="inherit" variant="outlined" sx={roundedButtonStyle} onClick={handleSignOut}>
               Sign Out
             </Button>
           </>
         ) : (
           <>
-            <Button color="inherit" component={Link} href="/signin">
+            <Button color="inherit" variant="outlined" component={Link} href="/signin" sx={roundedButtonStyle}>
               Sign In
             </Button>
             <Button color="inherit" component={Link} href="/signup">
