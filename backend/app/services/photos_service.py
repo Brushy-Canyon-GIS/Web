@@ -6,8 +6,7 @@ from typing import Dict, List, Optional, Any
 from databases import Database
 import json
 
-from app.models.photos import PhotoInfo, PhotoDetailResponse, StoragePhoto
-from app.config import settings
+from app.models.photos import PhotoInfo, PhotoDetailResponse
 
 
 class PhotosService:
@@ -259,7 +258,8 @@ class PhotosService:
         """
         Build a full URL from the hyperlink field.
         
-        Uses Supabase storage base URL to construct full photo URLs.
+        Currently returns the hyperlink as-is since we don't know
+        the base URL for photo storage. This can be configured later.
         
         Args:
             hyperlink: The hyperlink value from the database
@@ -274,133 +274,13 @@ class PhotosService:
         if hyperlink.startswith(('http://', 'https://')):
             return hyperlink
         
-        # Build full URL using Supabase storage
-        return f"{settings.supabase_storage_url}/{hyperlink}"
+        # Otherwise, return the filename
+        # TODO: Configure base URL for photo storage when known
+        return hyperlink
     
     async def get_total_count(self) -> int:
         """Get total number of photos."""
         query = f'SELECT COUNT(*) as count FROM "{self.TABLE_NAME}"'
-        result = await self.db.fetch_one(query)
-        return result['count'] if result else 0
-    
-    # ==================== Storage Photos Methods ====================
-    
-    async def list_storage_photos(
-        self,
-        limit: int = 100,
-        offset: int = 0,
-        filename: Optional[str] = None
-    ) -> List[StoragePhoto]:
-        """
-        Get list of all photos from the storage table with full URLs.
-        
-        Args:
-            limit: Maximum number of photos to return
-            offset: Number of photos to skip
-            filename: Optional filename filter (partial match)
-            
-        Returns:
-            List of StoragePhoto objects with full URLs
-        """
-        where_clause = ""
-        params = {"limit": limit, "offset": offset}
-        
-        if filename:
-            where_clause = "WHERE LOWER(filename) LIKE LOWER(:filename_pattern)"
-            params["filename_pattern"] = f"%{filename}%"
-        
-        query = f"""
-        SELECT 
-            id::text as id,
-            filename,
-            url,
-            created_at::text as created_at
-        FROM photos
-        {where_clause}
-        ORDER BY filename
-        LIMIT :limit OFFSET :offset
-        """
-        
-        results = await self.db.fetch_all(query, values=params)
-        
-        photos = []
-        for row in results:
-            photos.append(StoragePhoto(
-                id=row['id'],
-                filename=row['filename'],
-                url=row['url'],
-                created_at=row['created_at']
-            ))
-        
-        return photos
-    
-    async def get_storage_photo_by_id(self, photo_id: str) -> Optional[StoragePhoto]:
-        """
-        Get a specific photo from storage by UUID.
-        
-        Args:
-            photo_id: The photo UUID
-            
-        Returns:
-            StoragePhoto or None if not found
-        """
-        query = """
-        SELECT 
-            id::text as id,
-            filename,
-            url,
-            created_at::text as created_at
-        FROM photos
-        WHERE id::text = :photo_id
-        """
-        
-        result = await self.db.fetch_one(query, values={"photo_id": photo_id})
-        
-        if not result:
-            return None
-        
-        return StoragePhoto(
-            id=result['id'],
-            filename=result['filename'],
-            url=result['url'],
-            created_at=result['created_at']
-        )
-    
-    async def get_storage_photo_by_filename(self, filename: str) -> Optional[StoragePhoto]:
-        """
-        Get a specific photo from storage by filename.
-        
-        Args:
-            filename: The photo filename
-            
-        Returns:
-            StoragePhoto or None if not found
-        """
-        query = """
-        SELECT 
-            id::text as id,
-            filename,
-            url,
-            created_at::text as created_at
-        FROM photos
-        WHERE LOWER(filename) = LOWER(:filename)
-        """
-        
-        result = await self.db.fetch_one(query, values={"filename": filename})
-        
-        if not result:
-            return None
-        
-        return StoragePhoto(
-            id=result['id'],
-            filename=result['filename'],
-            url=result['url'],
-            created_at=result['created_at']
-        )
-    
-    async def get_storage_photos_count(self) -> int:
-        """Get total number of photos in storage."""
-        query = "SELECT COUNT(*) as count FROM photos"
         result = await self.db.fetch_one(query)
         return result['count'] if result else 0
 
