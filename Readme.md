@@ -17,6 +17,15 @@ Open your terminal in the backend folder
 
 The backend will be available at http://localhost:8000 
 
+**To run unit tests:**
+```bash
+cd backend
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+python -m pytest tests/ -v
+```
+
+**API Documentation:** http://localhost:8000/docs
+
 2. Frontend - React + Vite code
 
 To start the frontend 
