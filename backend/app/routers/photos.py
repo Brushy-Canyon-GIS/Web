@@ -107,3 +107,14 @@ async def get_photo_url(
         raise HTTPException(status_code=404, detail=f"Photo with ID {photo_id} not found or has no hyperlink")
     return {"photo_id": photo_id, "url": url}
 
+
+@router.get("/photourl/{photo_name:path}",  summary="Get photo url",
+    description="Returns the url of the photo by its name")
+async def get_photo_url_by_name(
+    photo_name: str,
+    service: PhotosService = Depends(get_service)
+):
+    url =  await service.get_photo_by_name(photo_name)
+    if not url:
+        raise HTTPException(status_code=404, detail=f"Photo with name {photo_name} not found")
+    return {"photo_name": photo_name, "url": url}

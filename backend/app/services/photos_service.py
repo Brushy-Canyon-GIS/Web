@@ -283,4 +283,19 @@ class PhotosService:
         query = f'SELECT COUNT(*) as count FROM "{self.TABLE_NAME}"'
         result = await self.db.fetch_one(query)
         return result['count'] if result else 0
+    
+    
+    async def get_photo_by_name(self, name: str):
+        
+        query = f"""
+        SELECT "url"
+        FROM "photos"
+        WHERE "filename" = :name
+        """
+        
+        result = await self.db.fetch_one(query, {"name": name})
+
+        return result
+        
+        
 

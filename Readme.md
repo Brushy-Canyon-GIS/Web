@@ -17,6 +17,9 @@ Open your terminal in the backend folder
 
 The backend will be available at http://localhost:8000 
 
+
+**Important!!!!!!! The database is not accessible on mines wifi so please use your personal hotspot**
+
 **To run unit tests:**
 ```bash
 cd backend

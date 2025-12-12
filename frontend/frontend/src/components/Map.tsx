@@ -9,15 +9,16 @@ mapboxgl.accessToken =
 
 interface MapProps {
   geojson?: GeoJSON.FeatureCollection;
-  cycleColors?: Record<string, string>;
+  onFeatureClick?: (data: { properties: Record<string, any>; photoUrl: string | null }) => void;
 }
 
-const Map: React.FC<MapProps> = ({ geojson, cycleColors }) => {
+const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const mapLoaded = useRef(false);
 
   const colors =  fanGeologyColors;
+
 
   useEffect(() => {
     if (map.current) return;
@@ -25,8 +26,9 @@ const Map: React.FC<MapProps> = ({ geojson, cycleColors }) => {
     map.current = new mapboxgl.Map({
       container: mapContainer.current!,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [-98, 38],
-      zoom: 3,
+      //style: "mapbox://styles/mapbox/standard-satellite",
+      center: [-100, 30],
+      zoom: 6,
     });
 
     map.current.addControl(new mapboxgl.NavigationControl());
@@ -34,6 +36,8 @@ const Map: React.FC<MapProps> = ({ geojson, cycleColors }) => {
     map.current.on("load", () => {
       mapLoaded.current = true;
     });
+
+
 
     return () => {
       map.current?.remove();
@@ -103,6 +107,59 @@ const Map: React.FC<MapProps> = ({ geojson, cycleColors }) => {
             "circle-stroke-color": "#FFFFFF",
           },
         });
+         const layerIds = ["geojson-fill", "geojson-line", "geojson-circle"];
+
+          layerIds.forEach((layerId) => {
+
+          map.current!.on("click", layerId, async (e) => {
+            if (e?.features?.[0]?.properties && onFeatureClick) {
+              const properties = e.features[0].properties;
+              
+   
+              if (properties.Hyperlink && properties.Hyperlink !== null) {
+                try {
+                  const res = await fetch(
+                    `http://localhost:8000/api/v1/photos/photourl/${properties.Hyperlink}`
+                  );
+                  const photoData = await res.json();
+                  console.log({photoData})
+
+               onFeatureClick({
+                    properties,
+                    photoUrl: photoData?.url?.url || null,
+                  });
+                } catch (error) {
+                  console.error("Error fetching photo URL:", error);
+
+                   onFeatureClick({
+                    properties,
+                    photoUrl: null,
+                  });
+                }
+              } else {
+
+                  onFeatureClick({
+                    properties,
+                    photoUrl: null,
+                  });
+              }
+            }
+          });
+
+
+          map.current!.on("mouseenter", layerId, () => {
+            if (map.current) {
+              map.current.getCanvas().style.cursor = "pointer";
+            }
+          });
+
+          map.current!.on("mouseleave", layerId, () => {
+            if (map.current) {
+              map.current.getCanvas().style.cursor = "";
+            }
+          });
+        });
+
       }
     };
 

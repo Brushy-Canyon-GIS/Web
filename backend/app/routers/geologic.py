@@ -65,7 +65,7 @@ async def get_table_info(
 )
 async def get_features(
     table_name: str,
-    limit: int = Query(100, ge=1, le=1000, description="Maximum number of features to return"),
+    limit: Optional[int] = Query(None, ge=1, description="Maximum number of features to return (None = no limit)"),
     offset: int = Query(0, ge=0, description="Number of features to skip"),
     service: GeologicDataService = Depends(get_service)
 ):

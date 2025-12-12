@@ -15,9 +15,6 @@ import { handleSignOut } from '../utils/auth';
 
 
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
-
 const  NavBar = () => {
   const { user } = useAuth();
   const roundedButtonStyle = {
@@ -27,7 +24,9 @@ const  NavBar = () => {
   }
 
   return (
-    <AppBar position="fixed">
+    <AppBar position="fixed"  sx={{
+    backgroundColor: "#568259"
+  }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Typography
