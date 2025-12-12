@@ -8,12 +8,23 @@ import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import AdbIcon from '@mui/icons-material/Adb';
+import Link from '@mui/material/Link'
+import { useAuth } from '../contexts/AuthContext';
+import Button from '@mui/material/Button';
+import { handleSignOut } from '../utils/auth';
+
 
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const  NavBar = () => {
+  const { user } = useAuth();
+  const roundedButtonStyle = {
+    borderRadius: "8px",
+    margin: "0 8px",
+    borderWidth: "2px"
+  }
 
   return (
     <AppBar position="fixed">
@@ -31,10 +42,27 @@ const  NavBar = () => {
               letterSpacing: '.3rem',
               color: '#ffffff' ,
               textDecoration: 'none',
+              flexGrow: 1
             }}
           >
             Brushy Canyon
           </Typography>
+          {user ? (
+          <>
+            <Button color="inherit" variant="outlined" sx={roundedButtonStyle} onClick={handleSignOut}>
+              Sign Out
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button color="inherit" variant="outlined" component={Link} href="/signin" sx={roundedButtonStyle}>
+              Sign In
+            </Button>
+            <Button color="inherit" component={Link} href="/signup">
+              Sign Up
+            </Button>
+          </>
+        )}
         </Toolbar>
       </Container>
     </AppBar>
