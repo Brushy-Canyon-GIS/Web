@@ -42,3 +42,21 @@ class PhotoDetailResponse(BaseModel):
     geometry: Optional[Dict[str, Any]] = Field(None, description="GeoJSON geometry")
     properties: Dict[str, Any] = Field(default_factory=dict, description="All properties")
 
+
+class StoragePhoto(BaseModel):
+    """
+    Photo from the photos storage table with full URL.
+    """
+    id: str = Field(..., description="Photo UUID")
+    filename: str = Field(..., description="Photo filename")
+    url: str = Field(..., description="Full URL to photo in Supabase storage")
+    created_at: Optional[str] = Field(None, description="Upload timestamp")
+
+
+class StoragePhotoListResponse(BaseModel):
+    """
+    Response containing list of storage photos with URLs.
+    """
+    photos: List[StoragePhoto] = Field(default_factory=list)
+    total: int = Field(..., description="Total number of photos")
+

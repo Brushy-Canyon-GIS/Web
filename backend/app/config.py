@@ -34,6 +34,9 @@ class Settings(BaseSettings):
     # Pagination defaults
     default_page_size: int = 100
     max_page_size: int = 1000
+    
+    # Supabase Storage
+    supabase_storage_url: str = "https://iwyygcmgtjrclhyykapf.supabase.co/storage/v1/object/public/photos"
 
 
 # Create a global settings instance
