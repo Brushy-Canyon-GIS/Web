@@ -98,7 +98,7 @@ async def filter_features(
     bbox: Optional[str] = Query(
         None, 
         description="Bounding box: min_lng,min_lat,max_lng,max_lat (e.g., -104.5,31.5,-103.5,32.5)",
-        example="-104.5,31.5,-103.5,32.5"
+        examples={"example1": {"value":"-104.5,31.5,-103.5,32.5"}}
     ),
     name: Optional[str] = Query(None, description="Filter by name (case-insensitive partial match)"),
     map_symbol: Optional[str] = Query(None, description="Filter by map symbol"),
