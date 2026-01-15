@@ -12,15 +12,6 @@ import App from './App.tsx';
 
 const router = createBrowserRouter([
   {
-    element: <PageLayout />,
-    children: [
-      {
-        path: '/',
-        element: <HomePage />,
-      }
-    ],
-  },
-  {
     path: 'signin',
     element: <SignInForm />
   },
@@ -32,7 +23,7 @@ const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
-        path: '/dashboard',
+        path: '/',
         element: <App />,
       },
     ],
@@ -42,8 +33,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AuthProvider>
-      <RouterProvider router={router} />
-    </AuthProvider>
+	<AuthProvider>
+      		<RouterProvider router={router} />
+    	</AuthProvider>
   </React.StrictMode>
 );
