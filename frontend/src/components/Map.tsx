@@ -8,8 +8,11 @@ mapboxgl.accessToken =
   "pk.eyJ1Ijoic3VzaHJ1dGhtdXJha2FyZSIsImEiOiJjbWgzd3dzaXEwYm0yMnFxMGt0c2t1NmFtIn0.vuyviEsUmHvmrRIVIBZZ9w";
 
 interface MapProps {
-  geojson?: GeoJSON.FeatureCollection;
-  onFeatureClick?: (data: { properties: Record<string, any>; photoUrl: string | null }) => void;
+  geojson: GeoJSON.FeatureCollection | null;
+  onFeatureClick?: (data: { 
+    properties: Record<string, any>; 
+    photoUrl: string | null;
+  }) => void;
 }
 
 const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
@@ -36,7 +39,6 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
     map.current.on("load", () => {
       mapLoaded.current = true;
     });
-
 
 
     return () => {
@@ -94,6 +96,17 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
           },
         });
 
+        // feature labeling by Name
+        map.current.addLayer({
+          id: "geojson-labels",
+          type: "symbol",
+          source: "geojson-data",
+
+          layout: {
+            "text-field": ["get", "Name"],
+            "text-size": 12,
+          },
+        });
 
         map.current.addLayer({
           id: "geojson-circle",
@@ -107,7 +120,8 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
             "circle-stroke-color": "#FFFFFF",
           },
         });
-         const layerIds = ["geojson-fill", "geojson-line", "geojson-circle"];
+
+        const layerIds = ["geojson-fill", "geojson-line", "geojson-circle"];
 
           layerIds.forEach((layerId) => {
 
@@ -115,7 +129,7 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
             if (e?.features?.[0]?.properties && onFeatureClick) {
               const properties = e.features[0].properties;
               
-   
+              // grab photo
               if (properties.Hyperlink && properties.Hyperlink !== null) {
                 try {
                   const res = await fetch(

@@ -73,4 +73,3 @@ class TableListResponse(BaseModel):
     """
     tables: List[TableInfo] = Field(default_factory=list)
     total: int = Field(..., description="Total number of tables")
-

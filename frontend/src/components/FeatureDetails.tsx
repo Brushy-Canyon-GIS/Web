@@ -2,7 +2,7 @@ import React from "react";
 
 interface FeatureDetailsProps {
   properties: Record<string, any>;
-  photoUrl?: string;
+  photoUrl: string | null;
   onBack: () => void;
 }
 
@@ -37,18 +37,18 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
 
         <div className="detail-item" style={{ marginBottom: "12px" }}>
           <strong>Name:</strong>
-          <div style={{ marginTop: "4px" }}>{properties.properties.Name || "N/A"}</div>
+          <div style={{ marginTop: "4px" }}>{properties.Name || "N/A"}</div>
         </div>
 
         <div className="detail-item" style={{ marginBottom: "12px" }}>
           <strong>Cycle:</strong>
-          <div style={{ marginTop: "4px" }}>{properties.properties.CYCLE || "N/A"}</div>
+          <div style={{ marginTop: "4px" }}>{properties.CYCLE || "N/A"}</div>
         </div>
 
         <div className="detail-item" style={{ marginBottom: "12px" }}>
           <strong>Fourth Order:</strong>
           <div style={{ marginTop: "4px" }}>
-            {properties.properties.FOURTH_ORD || "N/A"}
+            {properties.FOURTH_ORD || "N/A"}
           </div>
         </div>
         

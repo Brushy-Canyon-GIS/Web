@@ -41,4 +41,3 @@ class PhotoDetailResponse(BaseModel):
     length: Optional[float] = Field(None, description="Photo panel length")
     geometry: Optional[Dict[str, Any]] = Field(None, description="GeoJSON geometry")
     properties: Dict[str, Any] = Field(default_factory=dict, description="All properties")
-

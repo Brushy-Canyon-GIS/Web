@@ -16,7 +16,6 @@ type Layer =
   | "fan_delivery_system"
   | "fieldtripstops"
   | "ftrip_m"
-  | "geospatial_data"
   | "gis_region_small"
   | "gradient_regions"
   | "patterns";
@@ -79,7 +78,7 @@ function App() {
         <div className="options-panel">
           {selectedFeature ? (
             <FeatureDetails
-              properties={selectedFeature}
+              properties={selectedFeature.properties}
               photoUrl={selectedFeature.photoUrl}
               onBack={() => setSelectedFeature(null)}
             />
