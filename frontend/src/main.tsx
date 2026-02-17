@@ -1,41 +1,33 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import './index.css'
+// main.tsx
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import SignUpForm from './components/SignUpForm.tsx'
-import SignInForm from './components/SignInForm.tsx'
-import ProtectedRoute from './components/ProtectedRoute.tsx'
-import { AuthProvider } from './contexts/AuthContext.tsx'
-import App from './App.tsx';
+import App from './App';
+import SignUpForm from './components/SignUpForm';
+import SignInForm from './components/SignInForm';
 
-// import HomePage from './components/HomePage.tsx';
-// import PageLayout from './components/PageLayout.tsx';
+// No AuthProvider needed if you don't require login
+// If some components depend on it, you can keep it but ignore login logic
 
 const router = createBrowserRouter([
+  // Public routes
   {
-    path: 'signin',
-    element: <SignInForm />
+    path: '/',
+    element: <App /> // always accessible
   },
   {
-    path: 'signup',
-    element: <SignUpForm />
+    path: '/signin',
+    element: <SignInForm /> // optional
   },
   {
-    element: <ProtectedRoute />,
-    children: [
-      {
-        path: '/',
-        element: <App />,
-      },
-    ],
-  },
-
+    path: '/signup',
+    element: <SignUpForm /> // optional
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-	<AuthProvider>
-      		<RouterProvider router={router} />
-    	</AuthProvider>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
