@@ -9,7 +9,6 @@ from .database import database
 from .config import settings
 from .routers import geologic_router, photos_router
 
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """

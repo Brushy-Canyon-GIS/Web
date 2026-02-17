@@ -96,14 +96,38 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
           },
         });
 
+        // feature labeling by Cycle
+        map.current.addLayer({
+          id: "geojson-cycle",
+          type: "symbol",
+          source: "geojson-data",
+
+          layout: {
+            "text-field": ["get", "CYCLE"],
+            "text-size": 12,
+          },
+        });
+
         // feature labeling by Name
         map.current.addLayer({
-          id: "geojson-labels",
+          id: "geojson-name1",
           type: "symbol",
           source: "geojson-data",
 
           layout: {
             "text-field": ["get", "Name"],
+            "text-size": 12,
+          },
+        });
+
+        // feature labeling by NAME
+        map.current.addLayer({
+          id: "geojson-name2",
+          type: "symbol",
+          source: "geojson-data",
+
+          layout: {
+            "text-field": ["get", "NAME"],
             "text-size": 12,
           },
         });
