@@ -29,8 +29,8 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
       container: mapContainer.current!,
       style: "mapbox://styles/mapbox/streets-v11",
       //style: "mapbox://styles/mapbox/standard-satellite",
-      center: [-100, 30],
-      zoom: 6,
+      center: [-104.834853, 31.828347],
+      zoom: 8,
     });
 
     map.current.addControl(new mapboxgl.NavigationControl());
