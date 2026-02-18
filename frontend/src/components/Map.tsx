@@ -4,7 +4,7 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import fanGeologyColors from "../fanGeology.json";
 
 // const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
-// mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 interface MapProps {
   geojson: GeoJSON.FeatureCollection | null;
