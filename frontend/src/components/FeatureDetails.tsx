@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+
+const API_BASE = "http://localhost:8000/api/v1";
 
 interface FeatureDetailsProps {
   properties: Record<string, any>;
@@ -11,7 +13,13 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
   photoUrl,
   onBack,
 }) => {
-  console.log({ properties });
+  const displayName =
+    properties.NAME ?? properties.Name ?? properties.name ?? "";
+  const crossPlotUrl = displayName
+    ? `${API_BASE}/crossplots/${encodeURIComponent(displayName)}`
+    : null;
+  const [crossPlotError, setCrossPlotError] = useState(false);
+
   return (
     <div className="feature-details">
       <button
@@ -37,7 +45,7 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
 
         <div className="detail-item" style={{ marginBottom: "12px" }}>
           <strong>Name:</strong>
-          <div style={{ marginTop: "4px" }}>{properties.Name || "N/A"}</div>
+          <div style={{ marginTop: "4px" }}>{properties.Name ?? properties.NAME ?? "N/A"}</div>
         </div>
 
         <div className="detail-item" style={{ marginBottom: "12px" }}>
@@ -51,7 +59,27 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
             {properties.FOURTH_ORD || "N/A"}
           </div>
         </div>
-        
+
+        {crossPlotUrl && !crossPlotError && (
+          <div style={{ marginBottom: "20px" }}>
+            <strong style={{ display: "block", marginBottom: "8px", color: "#666" }}>
+              Cross plot (mean grain size vs thickness by facies):
+            </strong>
+            <img
+              src={crossPlotUrl}
+              alt={`Cross plot for ${displayName}`}
+              style={{
+                width: "100%",
+                height: "auto",
+                borderRadius: "8px",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                display: "block",
+              }}
+              onError={() => setCrossPlotError(true)}
+            />
+          </div>
+        )}
+
      {photoUrl && (
          <strong
               style={{ display: "block", marginBottom: "8px", color: "#666" }}

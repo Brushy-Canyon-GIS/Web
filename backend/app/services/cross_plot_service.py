@@ -3,7 +3,10 @@ Service for generating cross plots for measured sections.
 
 This service is based on the example notebook in
 `app/cross_plotting/20260205BrushyCanyonWebsite.ipynb` and the
-`MeasuredSectionStats.csv` file in the same folder.
+`MeasuredSectionStats.csv` file in the same folder. It supports
+fuzzy matching (as in `20260205BrushyCanyonWebsite 1.ipynb`) so that
+map display names (e.g. "Arrow Canyon") resolve to CSV names (e.g. "ArrowCanyon")
+when the match score is at least HIGH_CONFIDENCE_THRESHOLD.
 
 It reads the CSV, filters to a single measured section by name, and
 produces a matplotlib figure with:
@@ -24,6 +27,10 @@ import io
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import pandas as pd
+from rapidfuzz import fuzz, process
+
+# Minimum score (0-100) to treat a map name -> CSV name match as high confidence.
+HIGH_CONFIDENCE_THRESHOLD = 90
 
 
 class CrossPlotService:
@@ -39,6 +46,7 @@ class CrossPlotService:
 
         self.csv_path = csv_path
         self._df: Optional[pd.DataFrame] = None
+        self._csv_names: Optional[list[str]] = None
 
     def _get_dataframe(self) -> pd.DataFrame:
         """
@@ -52,13 +60,47 @@ class CrossPlotService:
             self._df = pd.read_csv(self.csv_path)
         return self._df
 
+    def _get_csv_names(self) -> list[str]:
+        """Unique section names from the CSV (used for fuzzy matching)."""
+        if self._csv_names is None:
+            df = self._get_dataframe()
+            self._csv_names = df["name"].dropna().unique().tolist()
+        return self._csv_names
+
+    def resolve_map_name_to_csv_name(self, map_name: str) -> Optional[str]:
+        """
+        Resolve a map display name (e.g. from GeoJSON NAME) to the CSV section name
+        using fuzzy matching. Only returns a match when score >= HIGH_CONFIDENCE_THRESHOLD.
+
+        Uses token_sort_ratio so "Arrow Canyon" and "ArrowCanyon" match (same as notebook).
+        """
+        if not map_name or not str(map_name).strip():
+            return None
+        map_name = str(map_name).strip()
+        csv_names = self._get_csv_names()
+        if not csv_names:
+            return None
+        result = process.extractOne(
+            map_name, csv_names, scorer=fuzz.token_sort_ratio
+        )
+        if result is None:
+            return None
+        _matched_name, score, _ = result
+        if score >= HIGH_CONFIDENCE_THRESHOLD:
+            return _matched_name
+        return None
+
     def generate_section_plot_png(self, section_name: str) -> bytes:
         """
         Generate a cross plot PNG image for the given section name.
 
+        section_name can be either the CSV name (e.g. ArrowCanyon) or a map
+        display name (e.g. Arrow Canyon); in the latter case it is resolved
+        via fuzzy matching (high-confidence only).
+
         Args:
-            section_name: Name of the measured section (matches the
-                          `name` column in MeasuredSectionStats.csv).
+            section_name: Measured section name (CSV column `name`) or map
+                          display name (e.g. GeoJSON NAME).
 
         Returns:
             PNG image bytes.
@@ -68,8 +110,14 @@ class CrossPlotService:
             FileNotFoundError: If the CSV file is missing.
         """
         df = self._get_dataframe()
-
-        section_df = df[df["name"] == section_name].copy()
+        # Support map display names: resolve to CSV name if exact match fails
+        csv_name = section_name
+        section_df = df[df["name"] == csv_name].copy()
+        if section_df.empty:
+            resolved = self.resolve_map_name_to_csv_name(section_name)
+            if resolved is not None:
+                csv_name = resolved
+                section_df = df[df["name"] == csv_name].copy()
         if section_df.empty:
             raise ValueError(f"No measured section stats found for '{section_name}'")
 
@@ -136,9 +184,9 @@ class CrossPlotService:
         else:
             section_total = float(stacked.values.sum())
 
-        ax1.set_ylabel(f"{section_name} Facies Thickness")
+        ax1.set_ylabel(f"{csv_name} Facies Thickness")
         ax1.set_title(
-            f"{section_name} — Total thickness by facies "
+            f"{csv_name} — Total thickness by facies "
             f"(total = {section_total:.2f} m)",
             fontsize=8,
         )
