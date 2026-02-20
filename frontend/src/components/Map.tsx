@@ -144,7 +144,14 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
           },
         });
 
-        const layerIds = ["geojson-fill", "geojson-line", "geojson-circle"];
+        const layerIds = [
+          "geojson-fill",
+          "geojson-line",
+          "geojson-circle",
+          "geojson-cycle",
+          "geojson-name1",
+          "geojson-name2",
+        ];
 
           layerIds.forEach((layerId) => {
 

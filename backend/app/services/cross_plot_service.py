@@ -20,6 +20,7 @@ can expose it as an HTTP endpoint.
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Optional
 import io
@@ -31,6 +32,18 @@ from rapidfuzz import fuzz, process
 
 # Minimum score (0-100) to treat a map name -> CSV name match as high confidence.
 HIGH_CONFIDENCE_THRESHOLD = 90
+
+# Cardinal direction full words (for canonicalizing order so "SE Colleen" and "SEColleen" match)
+_CARDINAL_WORDS = (
+    "southeast",
+    "southwest",
+    "northeast",
+    "northwest",
+    "north",
+    "south",
+    "east",
+    "west",
+)
 
 
 class CrossPlotService:
@@ -67,12 +80,62 @@ class CrossPlotService:
             self._csv_names = df["name"].dropna().unique().tolist()
         return self._csv_names
 
+    def _expand_cardinals(self, s: str) -> str:
+        """Expand cardinal abbreviations (SE, NW, N, etc.) to full words (southeast, northwest, north, etc.)."""
+        s = s.lower()
+        # Two-letter at start (e.g. SEColleen -> southeastColleen)
+        for abbr, full in [("se", "southeast"), ("sw", "southwest"), ("ne", "northeast"), ("nw", "northwest")]:
+            s = re.sub(r"^" + abbr + r"(?=[a-z0-9])", full, s)
+        # One-letter at start (e.g. NColleen -> northColleen)
+        for abbr, full in [("n", "north"), ("s", "south"), ("e", "east"), ("w", "west")]:
+            s = re.sub(r"^" + abbr + r"(?=[a-z0-9])", full, s)
+        # Whole-word abbreviations (e.g. 'colleen se' -> 'colleen southeast')
+        for abbr, full in [("se", "southeast"), ("sw", "southwest"), ("ne", "northeast"), ("nw", "northwest")]:
+            s = re.sub(r"\b" + abbr + r"\b", full, s)
+        for abbr, full in [("n", "north"), ("s", "south"), ("e", "east"), ("w", "west")]:
+            s = re.sub(r"\b" + abbr + r"\b", full, s)
+        return s
+
+    def _normalize_name(self, name: str) -> str:
+        """
+        Normalize for exact-like matching:
+        - Lowercase, remove the word 'canyon', expand cardinal abbreviations (SE->southeast, NW->northwest, etc.), strip non-alphanumeric.
+        - If the result contains a cardinal direction word, canonicalize by sorting parts so "SE Colleen" and "SEColleen" both become "colleensoutheast".
+        """
+        s = name.lower().replace("canyon", "")
+        s = self._expand_cardinals(s)
+        s = re.sub(r"[^a-z0-9]", "", s)
+        # If the string contains a cardinal direction word, canonicalize order so "SE Colleen" and "SEColleen" match
+        parts = []
+        remaining = s
+        for direction in _CARDINAL_WORDS:
+            while direction in remaining:
+                left, _, right = remaining.partition(direction)
+                if left:
+                    parts.append(left)
+                parts.append(direction)
+                remaining = right
+        if remaining:
+            parts.append(remaining)
+        if len(parts) > 1:
+            return "".join(sorted(parts))
+        return s
+
+    def _normalized_map_variants(self, normalized_map: str) -> list[str]:
+        """
+        Return variants of the normalized map name for matching.
+        E.g. 'colleen2' -> ['colleen2', 'colleen02'] so 'Colleen Canyon 2' matches CSV 'Colleen02'.
+        """
+        variants = [normalized_map]
+        m = re.match(r"^colleen(\d)$", normalized_map)
+        if m:
+            variants.append("colleen0" + m.group(1))
+        return variants
+
     def resolve_map_name_to_csv_name(self, map_name: str) -> Optional[str]:
         """
-        Resolve a map display name (e.g. from GeoJSON NAME) to the CSV section name
-        using fuzzy matching. Only returns a match when score >= HIGH_CONFIDENCE_THRESHOLD.
-
-        Uses token_sort_ratio so "Arrow Canyon" and "ArrowCanyon" match (same as notebook).
+        Resolve a map display name (e.g. from GeoJSON NAME) to the CSV section name.
+        Tries (1) normalized exact match (including Colleen Canyon N <-> Colleen0N), then (2) fuzzy match with score >= HIGH_CONFIDENCE_THRESHOLD.
         """
         if not map_name or not str(map_name).strip():
             return None
@@ -80,6 +143,11 @@ class CrossPlotService:
         csv_names = self._get_csv_names()
         if not csv_names:
             return None
+        normalized_map = self._normalize_name(map_name)
+        acceptable = set(self._normalized_map_variants(normalized_map))
+        for csv_name in csv_names:
+            if self._normalize_name(csv_name) in acceptable:
+                return csv_name
         result = process.extractOne(
             map_name, csv_names, scorer=fuzz.token_sort_ratio
         )
