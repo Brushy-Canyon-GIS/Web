@@ -8,7 +8,7 @@ load_dotenv()
 from .database import database
 from .config import settings
 # from .routers import geologic_router, photos_router
-from .routers.s3_router import router as s3_router
+from .routers.routers import router as s3_router
 
 
 
