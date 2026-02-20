@@ -7,7 +7,11 @@ load_dotenv()
 
 from .database import database
 from .config import settings
-from .routers import geologic_router, photos_router
+# from .routers import geologic_router, photos_router
+from .routers.s3_router import router as s3_router
+
+# Include the S3 router
+app.include_router(s3_router, prefix=settings.api_v1_prefix)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
