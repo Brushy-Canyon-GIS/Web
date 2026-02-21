@@ -4,6 +4,8 @@ import Map from "./components/Map";
 import NavBar from "./components/Nav";
 import FeatureDetails from "./components/FeatureDetails";
 
+const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:8000";
+
 type Layer =
   | "atlas_maps"
   | "fan_geology"
@@ -47,9 +49,10 @@ function App() {
 
       for (const layer of selectedLayers) {
         try {
-          const res = await fetch(
-            `http://localhost:8000/api/v1/geologic/${layer}`
-          );
+          // const res = await fetch(
+          //   `http://localhost:8000/api/v1/geologic/${layer}`
+          // );
+          const res = await fetch(`${API_BASE_URL}/api/v1/geologic/${layer}`);
           const data = await res.json();
           console.log({ data });
           layerData.push(data);
