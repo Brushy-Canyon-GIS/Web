@@ -1,55 +1,99 @@
-import os
-import json
-import boto3
-from typing import List
+from typing import List, Optional
+from app.database import database
 from app.models.geologic import FilterParams, GeoJSONFeatureCollection
 
-s3_bucket = os.getenv("S3_BUCKET")
-s3 = boto3.client(
-    "s3",
-    aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID"),
-    aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY"),
-    region_name=os.getenv("AWS_REGION"),
-)
 
 class GeologicDataService:
     """
-    Service for fetching geologic data from S3.
+    Service for fetching geologic data directly from the database.
+    Works with the geojson_layers table.
     """
-
-    def __init__(self):
-        pass  # no database needed
 
     async def get_available_tables(self) -> List[str]:
         """
-        List all JSON files in the S3 bucket.
+        Return all distinct layer names in the database.
         """
-        response = s3.list_objects_v2(Bucket=s3_bucket)
-        tables = []
-        for obj in response.get("Contents", []):
-            key = obj["Key"]
-            if key.endswith(".geojson"):
-                tables.append(key.replace(".geojson", ""))
-        return tables
+        query = "SELECT DISTINCT layer_name FROM geojson_layers ORDER BY layer_name"
+        rows = await database.fetch_all(query)
+        return [row['layer_name'] for row in rows]
 
-    async def get_features_geojson(self, table_name: str, filters: FilterParams) -> GeoJSONFeatureCollection:
+    async def get_table_info(self, table_name: str) -> Optional[dict]:
         """
-        Return the GeoJSON for a given table.
+        Return metadata about a specific table (layer_name).
         """
-        key = f"{table_name}.geojson"
-        try:
-            obj = s3.get_object(Bucket=s3_bucket, Key=key)
-            data = json.loads(obj['Body'].read())
-        except s3.exceptions.NoSuchKey:
-            raise ValueError(f"Table {table_name} not found in S3")
+        query = """
+        SELECT COUNT(*) AS total,
+               MIN(id) AS min_id,
+               MAX(id) AS max_id
+        FROM geojson_layers
+        WHERE LOWER(layer_name) = LOWER(:table_name)
+        """
+        result = await database.fetch_one(query, values={"table_name": table_name})
+        if result and result["total"] > 0:
+            return {
+                "name": table_name,
+                "total": result["total"],
+                "min_id": result["min_id"],
+                "max_id": result["max_id"]
+            }
+        return None
 
-        # Apply basic filtering (offset + limit)
-        features = data.get("features", [])
-        start = filters.offset
-        end = start + filters.limit if filters.limit else None
-        filtered_features = features[start:end]
+    async def get_features_geojson(
+        self, table_name: str, filters: FilterParams
+    ) -> GeoJSONFeatureCollection:
+        """
+        Return features from a given layer as GeoJSON FeatureCollection.
+        Supports limit, offset, and basic property filters.
+        """
+        # Build WHERE clause for optional filters
+        where_clauses = ["LOWER(layer_name) = LOWER(:table_name)"]
+        values = {"table_name": table_name}
 
-        return {
-            "type": "FeatureCollection",
-            "features": filtered_features
-        }
+        if filters.name:
+            where_clauses.append("LOWER(name) LIKE LOWER(:name)")
+            values["name"] = f"%{filters.name}%"
+        if filters.map_symbol:
+            where_clauses.append("map_symbol = :map_symbol")
+            values["map_symbol"] = filters.map_symbol
+        if filters.feature_type:
+            where_clauses.append("feature_type = :feature_type")
+            values["feature_type"] = filters.feature_type
+        if filters.region:
+            where_clauses.append("region = :region")
+            values["region"] = filters.region
+        if filters.fan_id:
+            where_clauses.append("fan_id = :fan_id")
+            values["fan_id"] = filters.fan_id
+
+        where_sql = " AND ".join(where_clauses)
+
+        query = f"""
+        SELECT json_build_object(
+            'type', 'FeatureCollection',
+            'features', COALESCE(json_agg(
+                json_build_object(
+                    'type', 'Feature',
+                    'geometry', geometry,
+                    'properties', jsonb_build_object(
+                        'id', id,
+                        'name', name,
+                        'map_symbol', map_symbol,
+                        'feature_type', feature_type,
+                        'region', region,
+                        'fan_id', fan_id
+                    )
+                )
+            ), '[]'::json)
+        ) AS geojson
+        FROM geojson_layers
+        WHERE {where_sql}
+        LIMIT :limit OFFSET :offset
+        """
+        values["limit"] = filters.limit
+        values["offset"] = filters.offset
+
+        result = await database.fetch_one(query, values=values)
+        if result and result["geojson"]:
+            return result["geojson"]
+
+        return {"type": "FeatureCollection", "features": []}
