@@ -5,13 +5,11 @@ from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 load_dotenv()
 
-from .database import database
-from .config import settings
+from app.database import database
+from app.config import settings
 
-from .routers import geologic_router, photos_router
-from .routers.routers import router as s3_router
-
-
+from app.routers import geologic_router, photos_router
+from app.routers.routers import router as s3_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
