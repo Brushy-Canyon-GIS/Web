@@ -28,20 +28,17 @@ LAYER_TO_S3_KEY = {
     "patterns": "patterns.geojson",
 }
 
-@router.get("/geojson/{filename}", summary="Fetch GeoJSON from S3")
-async def get_geojson(filename: str):
-    """
-    Fetch a GeoJSON file from a private S3 bucket.
-    """
-    # auto-append .json if missing
-    if not filename.endswith(".json"):
-        filename += ".json"
+@router.get("/geojson/{layer}")
+async def get_geojson(layer: str):
+    s3_filename = LAYER_TO_S3_KEY.get(layer)
+    if not s3_filename:
+        raise HTTPException(status_code=404, detail=f"Layer {layer} not found")
 
     try:
-        response = s3.get_object(Bucket=BUCKET_NAME, Key=f"geojson/{filename}")
+        response = s3.get_object(Bucket=BUCKET_NAME, Key=f"geojson/{s3_filename}")
         data = json.loads(response["Body"].read())
         return JSONResponse(content=data)
     except s3.exceptions.NoSuchKey:
-        raise HTTPException(status_code=404, detail=f"File {filename} not found in S3")
+        raise HTTPException(status_code=404, detail=f"File {s3_filename} not found in S3")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
