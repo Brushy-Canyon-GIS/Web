@@ -2,13 +2,9 @@ import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import fanGeologyColors from "../fanGeology.json";
-
-// const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
-mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
-
 import { PhotosService } from "../api/services/PhotosService";
 
-const API_BASE_URL = "http://18.222.134.134:8000";
+mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 interface MapProps {
   geojson: GeoJSON.FeatureCollection | null;

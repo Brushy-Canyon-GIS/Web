@@ -3,12 +3,7 @@ import "./App.css";
 import Map from "./components/Map";
 import NavBar from "./components/Nav";
 import FeatureDetails from "./components/FeatureDetails";
-
-// const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:8000";
-
 import { GeologicDataService } from "./api/services/GeologicDataService";
-
-const API_BASE_URL = "http://18.222.134.134:8000";
 
 type Layer =
   | "atlas_maps"
