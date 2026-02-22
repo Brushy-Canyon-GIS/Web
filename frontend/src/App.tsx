@@ -6,7 +6,9 @@ import FeatureDetails from "./components/FeatureDetails";
 
 // const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:8000";
 
-const API_BASE_URL = "https://18.222.134.134:8000";
+import { GeologicDataService } from "./api/services/GeologicDataService";
+
+const API_BASE_URL = "http://18.222.134.134:8000";
 
 type Layer =
   | "atlas_maps"
@@ -54,8 +56,7 @@ function App() {
           // const res = await fetch(
           //   `http://localhost:8000/api/v1/geologic/${layer}`
           // );
-          const res = await fetch(`${API_BASE_URL}/api/v1/geologic/${layer}`);
-          const data = await res.json();
+          const data = await GeologicDataService.getFeaturesApiV1GeologicTableNameGet(layer);
           console.log({ data });
           layerData.push(data);
         } catch (error) {

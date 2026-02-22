@@ -6,7 +6,9 @@ import fanGeologyColors from "../fanGeology.json";
 // const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
-const API_BASE_URL = "https://18.222.134.134:8000";
+import { PhotosService } from "../api/services/PhotosService";
+
+const API_BASE_URL = "http://18.222.134.134:8000";
 
 interface MapProps {
   geojson: GeoJSON.FeatureCollection | null;
@@ -157,16 +159,10 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
               // grab photo
               if (properties.Hyperlink && properties.Hyperlink !== null) {
                 try {
-                  const res = await fetch(
-                    `${API_BASE_URL}/api/v1/photos/photourl/${properties.Hyperlink}`
-                  );
-                  const photoData = await res.json();
+                  const photoData = await PhotosService.getPhotoUrlByNameApiV1PhotosPhotourlPhotoNameGet(properties.Hyperlink);
+                  onFeatureClick({ properties, photoUrl: photoData?.url || null });
                   console.log({photoData})
 
-               onFeatureClick({
-                    properties,
-                    photoUrl: photoData?.url?.url || null,
-                  });
                 } catch (error) {
                   console.error("Error fetching photo URL:", error);
 
