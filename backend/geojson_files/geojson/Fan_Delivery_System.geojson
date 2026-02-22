@@ -1,0 +1,631 @@
+{
+  "type": "FeatureCollection",
+  "name": "Fan_Delivery_System",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -104.89273471139809,
+              31.910518946846484
+            ],
+            [
+              -104.88662268842029,
+              31.91331946817149
+            ],
+            [
+              -104.87676469713942,
+              31.905694586519832
+            ],
+            [
+              -104.86198611170323,
+              31.89064835838471
+            ],
+            [
+              -104.85660756931478,
+              31.875010044486924
+            ],
+            [
+              -104.84205058727699,
+              31.87258787339655
+            ],
+            [
+              -104.83359492863838,
+              31.87317837239864
+            ],
+            [
+              -104.81250319683916,
+              31.850902974664166
+            ],
+            [
+              -104.80573182354014,
+              31.83285538002965
+            ],
+            [
+              -104.79004349476877,
+              31.815193855860393
+            ],
+            [
+              -104.78674528794639,
+              31.806562555555786
+            ],
+            [
+              -104.78409643416552,
+              31.801401670124875
+            ],
+            [
+              -104.77345015822411,
+              31.786165076739305
+            ],
+            [
+              -104.78528785689123,
+              31.781587146776012
+            ],
+            [
+              -104.79033676578179,
+              31.78029238196627
+            ],
+            [
+              -104.79978952719362,
+              31.77735038823549
+            ],
+            [
+              -104.8105323244871,
+              31.774459732917926
+            ],
+            [
+              -104.81930530151025,
+              31.798222661150444
+            ],
+            [
+              -104.8208257323018,
+              31.805211593429682
+            ],
+            [
+              -104.8208366244394,
+              31.80520837101984
+            ],
+            [
+              -104.83766248730642,
+              31.830094151978564
+            ],
+            [
+              -104.85070677054962,
+              31.84217646047051
+            ],
+            [
+              -104.85641561347826,
+              31.8471520233083
+            ],
+            [
+              -104.8702320052303,
+              31.873020465241357
+            ],
+            [
+              -104.87005129273174,
+              31.8730468645108
+            ],
+            [
+              -104.87938524344541,
+              31.87763899285109
+            ],
+            [
+              -104.87983923466166,
+              31.889864750421747
+            ],
+            [
+              -104.89273471139809,
+              31.910518946846484
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "Abbrev": null,
+        "Alpha": null,
+        "Area": null,
+        "CS_ID": null,
+        "CYCLE": null,
+        "CycleDsolv": null,
+        "DESCRIPT": null,
+        "FEATUREKEY": 1.0,
+        "FEATUREK_1": null,
+        "FEATURETYP": "Map_Filter",
+        "FID_": null,
+        "FID_Cross_": null,
+        "FID_FanGeo": null,
+        "FID_Fan_De": null,
+        "FID_GIS_Re": null,
+        "FID_Photo_": null,
+        "FID_ftrip_": null,
+        "FID_measur": null,
+        "FID_patter": null,
+        "FOURTH_ORD": null,
+        "FOURTH_O_1": null,
+        "FanID": null,
+        "Fan_Del": null,
+        "Fan_Del_sh": null,
+        "FeatureT_1": null,
+        "Geo_short": null,
+        "Geography": null,
+        "Gradient": null,
+        "Hyperlink": null,
+        "ID": null,
+        "Id": 1,
+        "Id_1": null,
+        "LENGTH": null,
+        "Location": null,
+        "MAPSYMBOL": "GUAD",
+        "MAP_SYMBOL": null,
+        "MS_ID": null,
+        "MidptX": null,
+        "MidptY": null,
+        "Mod_names": null,
+        "NAME": "Guadalupe Fan",
+        "NAME_1": null,
+        "Name": null,
+        "OBJECTID": 1,
+        "OBJECTID_1": null,
+        "ORDERBY": null,
+        "ORIG_FID": null,
+        "Offset": null,
+        "PATTERNID": null,
+        "PERSON": null,
+        "PMLABEL": null,
+        "PM_NAME": null,
+        "PM_NAME_NE": null,
+        "Pattern": null,
+        "Profile": null,
+        "REGION": null,
+        "SECTIONARC": null,
+        "SECTION_AB": null,
+        "SOURCE": null,
+        "STRAT_INTE": null,
+        "SectionArc": null,
+        "Shape_Ar_1": null,
+        "Shape_Area": 45028625.2409,
+        "Shape_Le_1": null,
+        "Shape_Leng": 40743.1354064,
+        "Shape_Length": null,
+        "Stop": null,
+        "Stop_Num": null,
+        "Symbology": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -104.81053232418202,
+              31.77445973279987
+            ],
+            [
+              -104.79978952719362,
+              31.77735038823549
+            ],
+            [
+              -104.79033676578179,
+              31.78029238196627
+            ],
+            [
+              -104.78528785689123,
+              31.781587146776012
+            ],
+            [
+              -104.77345015822411,
+              31.786165076739305
+            ],
+            [
+              -104.75719220351564,
+              31.755473652378974
+            ],
+            [
+              -104.72243278650814,
+              31.750258424702142
+            ],
+            [
+              -104.68799266201223,
+              31.73286044783195
+            ],
+            [
+              -104.6716668232631,
+              31.694398917923493
+            ],
+            [
+              -104.67169655852602,
+              31.69440123389656
+            ],
+            [
+              -104.66135931827016,
+              31.67324154805111
+            ],
+            [
+              -104.6602531286012,
+              31.65430265807971
+            ],
+            [
+              -104.66549993700261,
+              31.632575732142843
+            ],
+            [
+              -104.73369081788805,
+              31.65279814257207
+            ],
+            [
+              -104.73533155810136,
+              31.65858207606586
+            ],
+            [
+              -104.75249394278893,
+              31.658946058842705
+            ],
+            [
+              -104.76871325030005,
+              31.655216236837457
+            ],
+            [
+              -104.77462147962935,
+              31.654639244674918
+            ],
+            [
+              -104.77655325637362,
+              31.660591020146274
+            ],
+            [
+              -104.78487422925654,
+              31.68578470000999
+            ],
+            [
+              -104.7861803678406,
+              31.702399098452595
+            ],
+            [
+              -104.78595198598956,
+              31.70242616708772
+            ],
+            [
+              -104.78664638201323,
+              31.71549420809209
+            ],
+            [
+              -104.78666913508374,
+              31.71549778332848
+            ],
+            [
+              -104.78664594442003,
+              31.715686482272375
+            ],
+            [
+              -104.79020008467883,
+              31.726512187020703
+            ],
+            [
+              -104.80150194593459,
+              31.746983037872113
+            ],
+            [
+              -104.80168915120947,
+              31.746930035047786
+            ],
+            [
+              -104.80612527612003,
+              31.756556936770632
+            ],
+            [
+              -104.81053232418202,
+              31.77445973279987
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "Abbrev": null,
+        "Alpha": null,
+        "Area": null,
+        "CS_ID": null,
+        "CYCLE": null,
+        "CycleDsolv": null,
+        "DESCRIPT": null,
+        "FEATUREKEY": 2.0,
+        "FEATUREK_1": null,
+        "FEATURETYP": "Map_Filter",
+        "FID_": null,
+        "FID_Cross_": null,
+        "FID_FanGeo": null,
+        "FID_Fan_De": null,
+        "FID_GIS_Re": null,
+        "FID_Photo_": null,
+        "FID_ftrip_": null,
+        "FID_measur": null,
+        "FID_patter": null,
+        "FOURTH_ORD": null,
+        "FOURTH_O_1": null,
+        "FanID": null,
+        "Fan_Del": null,
+        "Fan_Del_sh": null,
+        "FeatureT_1": null,
+        "Geo_short": null,
+        "Geography": null,
+        "Gradient": null,
+        "Hyperlink": null,
+        "ID": null,
+        "Id": 2,
+        "Id_1": null,
+        "LENGTH": null,
+        "Location": null,
+        "MAPSYMBOL": "DELL",
+        "MAP_SYMBOL": null,
+        "MS_ID": null,
+        "MidptX": null,
+        "MidptY": null,
+        "Mod_names": null,
+        "NAME": "Dell City Fan",
+        "NAME_1": null,
+        "Name": null,
+        "OBJECTID": 2,
+        "OBJECTID_1": null,
+        "ORDERBY": null,
+        "ORIG_FID": null,
+        "Offset": null,
+        "PATTERNID": null,
+        "PERSON": null,
+        "PMLABEL": null,
+        "PM_NAME": null,
+        "PM_NAME_NE": null,
+        "Pattern": null,
+        "Profile": null,
+        "REGION": null,
+        "SECTIONARC": null,
+        "SECTION_AB": null,
+        "SOURCE": null,
+        "STRAT_INTE": null,
+        "SectionArc": null,
+        "Shape_Ar_1": null,
+        "Shape_Area": 132714064.049,
+        "Shape_Le_1": null,
+        "Shape_Leng": 51404.629206,
+        "Shape_Length": null,
+        "Stop": null,
+        "Stop_Num": null,
+        "Symbology": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -104.79981545482013,
+              31.616200872543853
+            ],
+            [
+              -104.78856163571787,
+              31.625286814849773
+            ],
+            [
+              -104.78041999966486,
+              31.642193830378908
+            ],
+            [
+              -104.77462147962935,
+              31.654639244674918
+            ],
+            [
+              -104.76871325030005,
+              31.655216236837457
+            ],
+            [
+              -104.75249394278893,
+              31.658946058842705
+            ],
+            [
+              -104.73533155810136,
+              31.65858207606586
+            ],
+            [
+              -104.73369081788805,
+              31.65279814257207
+            ],
+            [
+              -104.66549993700261,
+              31.632575732142843
+            ],
+            [
+              -104.6750669470607,
+              31.598146048013945
+            ],
+            [
+              -104.67217923977809,
+              31.595245742675647
+            ],
+            [
+              -104.6695912332647,
+              31.58512952023699
+            ],
+            [
+              -104.66457345915565,
+              31.578447321447992
+            ],
+            [
+              -104.66125177952951,
+              31.56756928266848
+            ],
+            [
+              -104.65585906956788,
+              31.561736634790556
+            ],
+            [
+              -104.6469197146233,
+              31.556073592272156
+            ],
+            [
+              -104.64508497221443,
+              31.547596838957364
+            ],
+            [
+              -104.63972593098413,
+              31.533515671009024
+            ],
+            [
+              -104.62783206182318,
+              31.52085404056159
+            ],
+            [
+              -104.6241523782535,
+              31.507736101290664
+            ],
+            [
+              -104.6171323657665,
+              31.486008024196806
+            ],
+            [
+              -104.61382549423693,
+              31.46901464882274
+            ],
+            [
+              -104.60269647407662,
+              31.42031214213959
+            ],
+            [
+              -104.61204144305962,
+              31.411294330082846
+            ],
+            [
+              -104.65215797369234,
+              31.462582526570028
+            ],
+            [
+              -104.6582378139701,
+              31.48587254766353
+            ],
+            [
+              -104.66187725317538,
+              31.497291387160118
+            ],
+            [
+              -104.69102412173282,
+              31.54056707138379
+            ],
+            [
+              -104.70252728071466,
+              31.543425169398223
+            ],
+            [
+              -104.71445881481486,
+              31.552670363014823
+            ],
+            [
+              -104.72840351556977,
+              31.562418938073524
+            ],
+            [
+              -104.73850126517705,
+              31.565149313746286
+            ],
+            [
+              -104.74933666643402,
+              31.570516592696258
+            ],
+            [
+              -104.7694386557625,
+              31.568690158546026
+            ],
+            [
+              -104.79640975998198,
+              31.576148928224946
+            ],
+            [
+              -104.79981545482013,
+              31.616200872543853
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "Abbrev": null,
+        "Alpha": null,
+        "Area": null,
+        "CS_ID": null,
+        "CYCLE": null,
+        "CycleDsolv": null,
+        "DESCRIPT": null,
+        "FEATUREKEY": 3.0,
+        "FEATUREK_1": null,
+        "FEATURETYP": "Map_Filter",
+        "FID_": null,
+        "FID_Cross_": null,
+        "FID_FanGeo": null,
+        "FID_Fan_De": null,
+        "FID_GIS_Re": null,
+        "FID_Photo_": null,
+        "FID_ftrip_": null,
+        "FID_measur": null,
+        "FID_patter": null,
+        "FOURTH_ORD": null,
+        "FOURTH_O_1": null,
+        "FanID": null,
+        "Fan_Del": null,
+        "Fan_Del_sh": null,
+        "FeatureT_1": null,
+        "Geo_short": null,
+        "Geography": null,
+        "Gradient": null,
+        "Hyperlink": null,
+        "ID": null,
+        "Id": 3,
+        "Id_1": null,
+        "LENGTH": null,
+        "Location": null,
+        "MAPSYMBOL": "BABB",
+        "MAP_SYMBOL": null,
+        "MS_ID": null,
+        "MidptX": null,
+        "MidptY": null,
+        "Mod_names": null,
+        "NAME": "Babb Fan",
+        "NAME_1": null,
+        "Name": null,
+        "OBJECTID": 3,
+        "OBJECTID_1": null,
+        "ORDERBY": null,
+        "ORIG_FID": null,
+        "Offset": null,
+        "PATTERNID": null,
+        "PERSON": null,
+        "PMLABEL": null,
+        "PM_NAME": null,
+        "PM_NAME_NE": null,
+        "Pattern": null,
+        "Profile": null,
+        "REGION": null,
+        "SECTIONARC": null,
+        "SECTION_AB": null,
+        "SOURCE": null,
+        "STRAT_INTE": null,
+        "SectionArc": null,
+        "Shape_Ar_1": null,
+        "Shape_Area": 172668173.038,
+        "Shape_Le_1": null,
+        "Shape_Leng": 75050.4190349,
+        "Shape_Length": null,
+        "Stop": null,
+        "Stop_Num": null,
+        "Symbology": null
+      }
+    }
+  ]
+}

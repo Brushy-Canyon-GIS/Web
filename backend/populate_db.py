@@ -5,13 +5,13 @@ import os
 
 # --- CONFIGURE YOUR DATABASE ---
 DB_USER = "cgiere"
-DB_PASSWORD = "YOUR_PASSWORD"
+DB_PASSWORD = "zanejobe5!"
 DB_NAME = "geology"
 DB_HOST = "localhost"
 
 # --- PATHS ---
-GEOJSON_FOLDER = "./geojson_files"  # folder containing all your .geojson files
-PHOTOS_FILE = "./photos.json"       # JSON file containing all photo entries
+GEOJSON_FOLDER = "./geojson_files/geojson"  # folder containing all your .geojson files
+PHOTOS_FILE = "./geojson_files/photos.json"       # JSON file containing all photo entries
 
 # ----------------------------
 # Insert GeoJSON features
