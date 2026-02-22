@@ -4,7 +4,8 @@ import Map from "./components/Map";
 import NavBar from "./components/Nav";
 import FeatureDetails from "./components/FeatureDetails";
 
-const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:8000";
+// const API_BASE_URL = import.meta.env.VITE_REACT_APP_API_URL || "http://localhost:8000";
+const API_BASE_URL = "https://production.dyii59t3s37wv.amplifyapp.com";
 
 type Layer =
   | "atlas_maps"
