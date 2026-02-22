@@ -6,7 +6,7 @@ import fanGeologyColors from "../fanGeology.json";
 // const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN;
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
-const API_BASE_URL = "https://18.222.134.134:8000";
+const API_BASE_URL = "http://18.222.134.134:8000";
 
 interface MapProps {
   geojson: GeoJSON.FeatureCollection | null;
