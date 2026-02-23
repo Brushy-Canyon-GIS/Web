@@ -1,0 +1,992 @@
+{
+  "type": "FeatureCollection",
+  "name": "Gradient_Regions",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -104.75355338111694,
+              31.75857517281482
+            ],
+            [
+              -104.70652899730088,
+              31.74315401853453
+            ],
+            [
+              -104.73469294468546,
+              31.69054618966502
+            ],
+            [
+              -104.7549870979167,
+              31.638874487748865
+            ],
+            [
+              -104.76969764631812,
+              31.573782124404865
+            ],
+            [
+              -104.77649517611385,
+              31.537403436439003
+            ],
+            [
+              -104.82679653118491,
+              31.545142188962135
+            ],
+            [
+              -104.81659664942012,
+              31.61503638716491
+            ],
+            [
+              -104.80194222545734,
+              31.665769451424957
+            ],
+            [
+              -104.79631284100165,
+              31.680125123622354
+            ],
+            [
+              -104.77719182290107,
+              31.715525527003702
+            ],
+            [
+              -104.75355338111694,
+              31.75857517281482
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "Abbrev": null,
+        "Alpha": null,
+        "Area": null,
+        "CS_ID": null,
+        "CYCLE": null,
+        "CycleDsolv": null,
+        "DESCRIPT": null,
+        "FEATUREKEY": 1,
+        "FEATUREK_1": null,
+        "FEATURETYP": "Map_Filter",
+        "FID_": null,
+        "FID_Cross_": null,
+        "FID_FanGeo": null,
+        "FID_Fan_De": null,
+        "FID_GIS_Re": null,
+        "FID_Photo_": null,
+        "FID_ftrip_": null,
+        "FID_measur": null,
+        "FID_patter": null,
+        "FOURTH_ORD": null,
+        "FOURTH_O_1": null,
+        "FanID": null,
+        "Fan_Del": null,
+        "Fan_Del_sh": null,
+        "FeatureT_1": null,
+        "Geo_short": null,
+        "Geography": null,
+        "Gradient": "Moderate",
+        "Hyperlink": null,
+        "ID": null,
+        "Id": 5,
+        "Id_1": null,
+        "LENGTH": null,
+        "Location": null,
+        "MAPSYMBOL": null,
+        "MAP_SYMBOL": null,
+        "MS_ID": null,
+        "MidptX": null,
+        "MidptY": null,
+        "Mod_names": null,
+        "NAME": null,
+        "NAME_1": null,
+        "Name": null,
+        "OBJECTID": 1,
+        "OBJECTID_1": null,
+        "ORDERBY": null,
+        "ORIG_FID": null,
+        "Offset": null,
+        "PATTERNID": null,
+        "PERSON": null,
+        "PMLABEL": null,
+        "PM_NAME": null,
+        "PM_NAME_NE": null,
+        "Pattern": null,
+        "Profile": "Base of Slope",
+        "REGION": null,
+        "SECTIONARC": null,
+        "SECTION_AB": null,
+        "SOURCE": null,
+        "STRAT_INTE": null,
+        "SectionArc": null,
+        "Shape_Ar_1": null,
+        "Shape_Area": 121079010.368,
+        "Shape_Le_1": null,
+        "Shape_Leng": 58527.8731828,
+        "Shape_Length": null,
+        "Stop": null,
+        "Stop_Num": null,
+        "Symbology": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -104.67168816670491,
+              31.45194638673893
+            ],
+            [
+              -104.66922906710374,
+              31.516103426025257
+            ],
+            [
+              -104.66344830313574,
+              31.56971669369407
+            ],
+            [
+              -104.65152799885865,
+              31.606122295151547
+            ],
+            [
+              -104.59176435722193,
+              31.592491695185743
+            ],
+            [
+              -104.60541447997548,
+              31.538906467724004
+            ],
+            [
+              -104.61470403485184,
+              31.454660921603537
+            ],
+            [
+              -104.60713502462367,
+              31.39430474049157
+            ],
+            [
+              -104.66965816769647,
+              31.393523137828502
+            ],
+            [
+              -104.67168816670491,
+              31.45194638673893
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "Abbrev": null,
+        "Alpha": null,
+        "Area": null,
+        "CS_ID": null,
+        "CYCLE": null,
+        "CycleDsolv": null,
+        "DESCRIPT": null,
+        "FEATUREKEY": 2,
+        "FEATUREK_1": null,
+        "FEATURETYP": "Map_Filter",
+        "FID_": null,
+        "FID_Cross_": null,
+        "FID_FanGeo": null,
+        "FID_Fan_De": null,
+        "FID_GIS_Re": null,
+        "FID_Photo_": null,
+        "FID_ftrip_": null,
+        "FID_measur": null,
+        "FID_patter": null,
+        "FOURTH_ORD": null,
+        "FOURTH_O_1": null,
+        "FanID": null,
+        "Fan_Del": null,
+        "Fan_Del_sh": null,
+        "FeatureT_1": null,
+        "Geo_short": null,
+        "Geography": null,
+        "Gradient": "Very Low",
+        "Hyperlink": null,
+        "ID": null,
+        "Id": 8,
+        "Id_1": null,
+        "LENGTH": null,
+        "Location": null,
+        "MAPSYMBOL": null,
+        "MAP_SYMBOL": null,
+        "MS_ID": null,
+        "MidptX": null,
+        "MidptY": null,
+        "Mod_names": null,
+        "NAME": null,
+        "NAME_1": null,
+        "Name": null,
+        "OBJECTID": 2,
+        "OBJECTID_1": null,
+        "ORDERBY": null,
+        "ORIG_FID": null,
+        "Offset": null,
+        "PATTERNID": null,
+        "PERSON": null,
+        "PMLABEL": null,
+        "PM_NAME": null,
+        "PM_NAME_NE": null,
+        "Pattern": null,
+        "Profile": "Fan Fringe",
+        "REGION": null,
+        "SECTIONARC": null,
+        "SECTION_AB": null,
+        "SOURCE": null,
+        "STRAT_INTE": null,
+        "SectionArc": null,
+        "Shape_Ar_1": null,
+        "Shape_Area": 131060494.202,
+        "Shape_Le_1": null,
+        "Shape_Leng": 57756.6090794,
+        "Shape_Length": null,
+        "Stop": null,
+        "Stop_Num": null,
+        "Symbology": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -104.66182667400778,
+              31.70952694740045
+            ],
+            [
+              -104.60590652634635,
+              31.688299183219222
+            ],
+            [
+              -104.64307898177003,
+              31.631908112356285
+            ],
+            [
+              -104.65152799885865,
+              31.606122295151547
+            ],
+            [
+              -104.66344830313574,
+              31.56971669369407
+            ],
+            [
+              -104.66922906710374,
+              31.516103426025257
+            ],
+            [
+              -104.67168816670491,
+              31.45194638673893
+            ],
+            [
+              -104.72864998035848,
+              31.455910131838827
+            ],
+            [
+              -104.72508101374758,
+              31.53060010499402
+            ],
+            [
+              -104.72163078342962,
+              31.563152735578907
+            ],
+            [
+              -104.71145044418661,
+              31.600478332375285
+            ],
+            [
+              -104.70236300142516,
+              31.64355123159876
+            ],
+            [
+              -104.69220997154736,
+              31.66746803896285
+            ],
+            [
+              -104.66182667400778,
+              31.70952694740045
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "Abbrev": null,
+        "Alpha": null,
+        "Area": null,
+        "CS_ID": null,
+        "CYCLE": null,
+        "CycleDsolv": null,
+        "DESCRIPT": null,
+        "FEATUREKEY": 3,
+        "FEATUREK_1": null,
+        "FEATURETYP": "Map_Filter",
+        "FID_": null,
+        "FID_Cross_": null,
+        "FID_FanGeo": null,
+        "FID_Fan_De": null,
+        "FID_GIS_Re": null,
+        "FID_Photo_": null,
+        "FID_ftrip_": null,
+        "FID_measur": null,
+        "FID_patter": null,
+        "FOURTH_ORD": null,
+        "FOURTH_O_1": null,
+        "FanID": null,
+        "Fan_Del": null,
+        "Fan_Del_sh": null,
+        "FeatureT_1": null,
+        "Geo_short": null,
+        "Geography": null,
+        "Gradient": "Low",
+        "Hyperlink": null,
+        "ID": null,
+        "Id": 7,
+        "Id_1": null,
+        "LENGTH": null,
+        "Location": null,
+        "MAPSYMBOL": null,
+        "MAP_SYMBOL": null,
+        "MS_ID": null,
+        "MidptX": null,
+        "MidptY": null,
+        "Mod_names": null,
+        "NAME": null,
+        "NAME_1": null,
+        "Name": null,
+        "OBJECTID": 3,
+        "OBJECTID_1": null,
+        "ORDERBY": null,
+        "ORIG_FID": null,
+        "Offset": null,
+        "PATTERNID": null,
+        "PERSON": null,
+        "PMLABEL": null,
+        "PM_NAME": null,
+        "PM_NAME_NE": null,
+        "Pattern": null,
+        "Profile": "Upper Basin Floor",
+        "REGION": null,
+        "SECTIONARC": null,
+        "SECTION_AB": null,
+        "SOURCE": null,
+        "STRAT_INTE": null,
+        "SectionArc": null,
+        "Shape_Ar_1": null,
+        "Shape_Area": 155417119.751,
+        "Shape_Le_1": null,
+        "Shape_Leng": 67711.4666998,
+        "Shape_Length": null,
+        "Stop": null,
+        "Stop_Num": null,
+        "Symbology": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -104.86434039152547,
+              31.87461288243444
+            ],
+            [
+              -104.89257324219345,
+              31.836594411299316
+            ],
+            [
+              -104.93505025944457,
+              31.85551607896697
+            ],
+            [
+              -104.91145522450304,
+              31.891891206926115
+            ],
+            [
+              -104.8833574360189,
+              31.922512067912148
+            ],
+            [
+              -104.84073391424265,
+              31.898525836057043
+            ],
+            [
+              -104.86434039152547,
+              31.87461288243444
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "Abbrev": null,
+        "Alpha": null,
+        "Area": null,
+        "CS_ID": null,
+        "CYCLE": null,
+        "CycleDsolv": null,
+        "DESCRIPT": null,
+        "FEATUREKEY": 4,
+        "FEATUREK_1": null,
+        "FEATURETYP": "Map_Filter",
+        "FID_": null,
+        "FID_Cross_": null,
+        "FID_FanGeo": null,
+        "FID_Fan_De": null,
+        "FID_GIS_Re": null,
+        "FID_Photo_": null,
+        "FID_ftrip_": null,
+        "FID_measur": null,
+        "FID_patter": null,
+        "FOURTH_ORD": null,
+        "FOURTH_O_1": null,
+        "FanID": null,
+        "Fan_Del": null,
+        "Fan_Del_sh": null,
+        "FeatureT_1": null,
+        "Geo_short": null,
+        "Geography": null,
+        "Gradient": "Extreme",
+        "Hyperlink": null,
+        "ID": null,
+        "Id": 1,
+        "Id_1": null,
+        "LENGTH": null,
+        "Location": null,
+        "MAPSYMBOL": null,
+        "MAP_SYMBOL": null,
+        "MS_ID": null,
+        "MidptX": null,
+        "MidptY": null,
+        "Mod_names": null,
+        "NAME": null,
+        "NAME_1": null,
+        "Name": null,
+        "OBJECTID": 4,
+        "OBJECTID_1": null,
+        "ORDERBY": null,
+        "ORIG_FID": null,
+        "Offset": null,
+        "PATTERNID": null,
+        "PERSON": null,
+        "PMLABEL": null,
+        "PM_NAME": null,
+        "PM_NAME_NE": null,
+        "Pattern": null,
+        "Profile": "Canyon",
+        "REGION": null,
+        "SECTIONARC": null,
+        "SECTION_AB": null,
+        "SOURCE": null,
+        "STRAT_INTE": null,
+        "SectionArc": null,
+        "Shape_Ar_1": null,
+        "Shape_Area": 40911693.1508,
+        "Shape_Le_1": null,
+        "Shape_Leng": 26776.2618578,
+        "Shape_Length": null,
+        "Stop": null,
+        "Stop_Num": null,
+        "Symbology": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -104.68752696761806,
+              31.72874473007568
+            ],
+            [
+              -104.65845216088958,
+              31.71334847498702
+            ],
+            [
+              -104.66182667400778,
+              31.70952694740045
+            ],
+            [
+              -104.69220997154736,
+              31.66746803896285
+            ],
+            [
+              -104.70236300142516,
+              31.64355123159876
+            ],
+            [
+              -104.71145044418661,
+              31.600478332375285
+            ],
+            [
+              -104.72163078342962,
+              31.563152735578907
+            ],
+            [
+              -104.72508101374758,
+              31.53060010499402
+            ],
+            [
+              -104.77649517611385,
+              31.537403436439003
+            ],
+            [
+              -104.76969764631812,
+              31.573782124404865
+            ],
+            [
+              -104.7549870979167,
+              31.638874487748865
+            ],
+            [
+              -104.73469294468546,
+              31.69054618966502
+            ],
+            [
+              -104.71007020358846,
+              31.736543002773367
+            ],
+            [
+              -104.68752696761806,
+              31.72874473007568
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "Abbrev": null,
+        "Alpha": null,
+        "Area": null,
+        "CS_ID": null,
+        "CYCLE": null,
+        "CycleDsolv": null,
+        "DESCRIPT": null,
+        "FEATUREKEY": 5,
+        "FEATUREK_1": null,
+        "FEATURETYP": "Map_Filter",
+        "FID_": null,
+        "FID_Cross_": null,
+        "FID_FanGeo": null,
+        "FID_Fan_De": null,
+        "FID_GIS_Re": null,
+        "FID_Photo_": null,
+        "FID_ftrip_": null,
+        "FID_measur": null,
+        "FID_patter": null,
+        "FOURTH_ORD": null,
+        "FOURTH_O_1": null,
+        "FanID": null,
+        "Fan_Del": null,
+        "Fan_Del_sh": null,
+        "FeatureT_1": null,
+        "Geo_short": null,
+        "Geography": null,
+        "Gradient": "Moderately Low",
+        "Hyperlink": null,
+        "ID": null,
+        "Id": 6,
+        "Id_1": null,
+        "LENGTH": null,
+        "Location": null,
+        "MAPSYMBOL": null,
+        "MAP_SYMBOL": null,
+        "MS_ID": null,
+        "MidptX": null,
+        "MidptY": null,
+        "Mod_names": null,
+        "NAME": null,
+        "NAME_1": null,
+        "Name": null,
+        "OBJECTID": 5,
+        "OBJECTID_1": null,
+        "ORDERBY": null,
+        "ORIG_FID": null,
+        "Offset": null,
+        "PATTERNID": null,
+        "PERSON": null,
+        "PMLABEL": null,
+        "PM_NAME": null,
+        "PM_NAME_NE": null,
+        "Pattern": null,
+        "Profile": "Upper Basin Foor",
+        "REGION": null,
+        "SECTIONARC": null,
+        "SECTION_AB": null,
+        "SOURCE": null,
+        "STRAT_INTE": null,
+        "SectionArc": null,
+        "Shape_Ar_1": null,
+        "Shape_Area": 109571012.361,
+        "Shape_Le_1": null,
+        "Shape_Leng": 55246.0535048,
+        "Shape_Length": null,
+        "Stop": null,
+        "Stop_Num": null,
+        "Symbology": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -104.89356142962892,
+              31.835378365684246
+            ],
+            [
+              -104.89257324219345,
+              31.836594411299316
+            ],
+            [
+              -104.86434039152547,
+              31.87461288243444
+            ],
+            [
+              -104.84073391424265,
+              31.898525836057043
+            ],
+            [
+              -104.79252607781784,
+              31.872601075965388
+            ],
+            [
+              -104.80602571776095,
+              31.85634292754904
+            ],
+            [
+              -104.8206497169765,
+              31.83625441383427
+            ],
+            [
+              -104.84088768744103,
+              31.808510295373438
+            ],
+            [
+              -104.89356142962892,
+              31.835378365684246
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "Abbrev": null,
+        "Alpha": null,
+        "Area": null,
+        "CS_ID": null,
+        "CYCLE": null,
+        "CycleDsolv": null,
+        "DESCRIPT": null,
+        "FEATUREKEY": 6,
+        "FEATUREK_1": null,
+        "FEATURETYP": "Map_Filter",
+        "FID_": null,
+        "FID_Cross_": null,
+        "FID_FanGeo": null,
+        "FID_Fan_De": null,
+        "FID_GIS_Re": null,
+        "FID_Photo_": null,
+        "FID_ftrip_": null,
+        "FID_measur": null,
+        "FID_patter": null,
+        "FOURTH_ORD": null,
+        "FOURTH_O_1": null,
+        "FanID": null,
+        "Fan_Del": null,
+        "Fan_Del_sh": null,
+        "FeatureT_1": null,
+        "Geo_short": null,
+        "Geography": null,
+        "Gradient": "Very High",
+        "Hyperlink": null,
+        "ID": null,
+        "Id": 2,
+        "Id_1": null,
+        "LENGTH": null,
+        "Location": null,
+        "MAPSYMBOL": null,
+        "MAP_SYMBOL": null,
+        "MS_ID": null,
+        "MidptX": null,
+        "MidptY": null,
+        "Mod_names": null,
+        "NAME": null,
+        "NAME_1": null,
+        "Name": null,
+        "OBJECTID": 6,
+        "OBJECTID_1": null,
+        "ORDERBY": null,
+        "ORIG_FID": null,
+        "Offset": null,
+        "PATTERNID": null,
+        "PERSON": null,
+        "PMLABEL": null,
+        "PM_NAME": null,
+        "PM_NAME_NE": null,
+        "Pattern": null,
+        "Profile": "Upper Slope",
+        "REGION": null,
+        "SECTIONARC": null,
+        "SECTION_AB": null,
+        "SOURCE": null,
+        "STRAT_INTE": null,
+        "SectionArc": null,
+        "Shape_Ar_1": null,
+        "Shape_Area": 49484955.2647,
+        "Shape_Le_1": null,
+        "Shape_Leng": 29049.9589043,
+        "Shape_Length": null,
+        "Stop": null,
+        "Stop_Num": null,
+        "Symbology": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -104.80602571776095,
+              31.85634292754904
+            ],
+            [
+              -104.760090446481,
+              31.831366823010086
+            ],
+            [
+              -104.7814600138681,
+              31.806507157833263
+            ],
+            [
+              -104.81617664382422,
+              31.755688819006444
+            ],
+            [
+              -104.86447935503404,
+              31.778851161359558
+            ],
+            [
+              -104.84088768744103,
+              31.808510295373438
+            ],
+            [
+              -104.8206497169765,
+              31.83625441383427
+            ],
+            [
+              -104.80602571776095,
+              31.85634292754904
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "Abbrev": null,
+        "Alpha": null,
+        "Area": null,
+        "CS_ID": null,
+        "CYCLE": null,
+        "CycleDsolv": null,
+        "DESCRIPT": null,
+        "FEATUREKEY": 7,
+        "FEATUREK_1": null,
+        "FEATURETYP": "Map_Filter",
+        "FID_": null,
+        "FID_Cross_": null,
+        "FID_FanGeo": null,
+        "FID_Fan_De": null,
+        "FID_GIS_Re": null,
+        "FID_Photo_": null,
+        "FID_ftrip_": null,
+        "FID_measur": null,
+        "FID_patter": null,
+        "FOURTH_ORD": null,
+        "FOURTH_O_1": null,
+        "FanID": null,
+        "Fan_Del": null,
+        "Fan_Del_sh": null,
+        "FeatureT_1": null,
+        "Geo_short": null,
+        "Geography": null,
+        "Gradient": "High",
+        "Hyperlink": null,
+        "ID": null,
+        "Id": 3,
+        "Id_1": null,
+        "LENGTH": null,
+        "Location": null,
+        "MAPSYMBOL": null,
+        "MAP_SYMBOL": null,
+        "MS_ID": null,
+        "MidptX": null,
+        "MidptY": null,
+        "Mod_names": null,
+        "NAME": null,
+        "NAME_1": null,
+        "Name": null,
+        "OBJECTID": 7,
+        "OBJECTID_1": null,
+        "ORDERBY": null,
+        "ORIG_FID": null,
+        "Offset": null,
+        "PATTERNID": null,
+        "PERSON": null,
+        "PMLABEL": null,
+        "PM_NAME": null,
+        "PM_NAME_NE": null,
+        "Pattern": null,
+        "Profile": "Middle Slope",
+        "REGION": null,
+        "SECTIONARC": null,
+        "SECTION_AB": null,
+        "SOURCE": null,
+        "STRAT_INTE": null,
+        "SectionArc": null,
+        "Shape_Ar_1": null,
+        "Shape_Area": 52045387.2728,
+        "Shape_Le_1": null,
+        "Shape_Leng": 30772.561875,
+        "Shape_Length": null,
+        "Stop": null,
+        "Stop_Num": null,
+        "Symbology": null
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              -104.7814600138681,
+              31.806507157833263
+            ],
+            [
+              -104.73329178114516,
+              31.789178496051267
+            ],
+            [
+              -104.75355338111694,
+              31.75857517281482
+            ],
+            [
+              -104.77719182290107,
+              31.715525527003702
+            ],
+            [
+              -104.79631284100165,
+              31.680125123622354
+            ],
+            [
+              -104.84555652963343,
+              31.697431336951094
+            ],
+            [
+              -104.82056932227663,
+              31.749254100164336
+            ],
+            [
+              -104.81617664382422,
+              31.755688819006444
+            ],
+            [
+              -104.7814600138681,
+              31.806507157833263
+            ]
+          ]
+        ]
+      },
+      "properties": {
+        "Abbrev": null,
+        "Alpha": null,
+        "Area": null,
+        "CS_ID": null,
+        "CYCLE": null,
+        "CycleDsolv": null,
+        "DESCRIPT": null,
+        "FEATUREKEY": 8,
+        "FEATUREK_1": null,
+        "FEATURETYP": "Map_Filter",
+        "FID_": null,
+        "FID_Cross_": null,
+        "FID_FanGeo": null,
+        "FID_Fan_De": null,
+        "FID_GIS_Re": null,
+        "FID_Photo_": null,
+        "FID_ftrip_": null,
+        "FID_measur": null,
+        "FID_patter": null,
+        "FOURTH_ORD": null,
+        "FOURTH_O_1": null,
+        "FanID": null,
+        "Fan_Del": null,
+        "Fan_Del_sh": null,
+        "FeatureT_1": null,
+        "Geo_short": null,
+        "Geography": null,
+        "Gradient": "Moderately High",
+        "Hyperlink": null,
+        "ID": null,
+        "Id": 4,
+        "Id_1": null,
+        "LENGTH": null,
+        "Location": null,
+        "MAPSYMBOL": null,
+        "MAP_SYMBOL": null,
+        "MS_ID": null,
+        "MidptX": null,
+        "MidptY": null,
+        "Mod_names": null,
+        "NAME": null,
+        "NAME_1": null,
+        "Name": null,
+        "OBJECTID": 8,
+        "OBJECTID_1": null,
+        "ORDERBY": null,
+        "ORIG_FID": null,
+        "Offset": null,
+        "PATTERNID": null,
+        "PERSON": null,
+        "PMLABEL": null,
+        "PM_NAME": null,
+        "PM_NAME_NE": null,
+        "Pattern": null,
+        "Profile": "Lower Slope",
+        "REGION": null,
+        "SECTIONARC": null,
+        "SECTION_AB": null,
+        "SOURCE": null,
+        "STRAT_INTE": null,
+        "SectionArc": null,
+        "Shape_Ar_1": null,
+        "Shape_Area": 69286596.7104,
+        "Shape_Le_1": null,
+        "Shape_Leng": 37039.5544784,
+        "Shape_Length": null,
+        "Stop": null,
+        "Stop_Num": null,
+        "Symbology": null
+      }
+    }
+  ]
+}
