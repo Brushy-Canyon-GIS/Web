@@ -4,6 +4,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 import fanGeologyColors from "../fanGeology.json";
 import { PhotosService } from "../api/services/PhotosService";
 
+const API_BASE_URL = "https://api.outcropanalog.com";
+
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
 interface MapProps {
@@ -151,28 +153,30 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
           map.current!.on("click", layerId, async (e) => {
             if (e?.features?.[0]?.properties && onFeatureClick) {
               const properties = e.features[0].properties;
-              
               // grab photo
               if (properties.Hyperlink && properties.Hyperlink !== null) {
                 try {
-                  const photoData = await PhotosService.getPhotoUrlByNameApiV1PhotosPhotourlPhotoNameGet(properties.Hyperlink);
+                  // Make sure PhotosService points to your live backend
+                  const photoData = await PhotosService.getPhotoUrlByNameApiV1PhotosPhotourlPhotoNameGet(
+                    properties.Hyperlink,
+                    { basePath: API_BASE_URL } // <-- explicitly set base URL if needed
+                  );
+
                   onFeatureClick({ properties, photoUrl: photoData?.url || null });
-                  console.log({photoData})
+                  console.log({ photoData });
 
                 } catch (error) {
                   console.error("Error fetching photo URL:", error);
-
-                   onFeatureClick({
+                  onFeatureClick({
                     properties,
                     photoUrl: null,
                   });
                 }
               } else {
-
-                  onFeatureClick({
-                    properties,
-                    photoUrl: null,
-                  });
+                onFeatureClick({
+                  properties,
+                  photoUrl: null,
+                });
               }
             }
           });
