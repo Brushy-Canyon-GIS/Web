@@ -90,6 +90,12 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
           </>
         )}
 
+        {crossPlotUrl && crossPlotError && (
+          <p style={{ color: "#666", marginTop: 8, marginBottom: 16 }}>
+            Cross plot unavailable for this section.
+          </p>
+        )}
+
         {crossPlotLoaded && crossPlotUrl && !crossPlotError && (
           <div style={{ marginBottom: "20px" }}>
             <button
