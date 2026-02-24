@@ -8,21 +8,38 @@ import { OpenAPI } from "./api/core/OpenAPI";
 
 OpenAPI.BASE = "https://api.outcropanalog.com";
 
-type Layer =
-  | "atlas_maps"
-  | "fan_geology"
-  | "photo_panels"
-  | "cross_sections"
-  | "faults"
-  | "geospatial_data"
-  | "measured_sections_all_areas"
-  | "brushy_intersect_final2"
-  | "fan_delivery_system"
-  | "fieldtripstops"
-  | "ftrip_m"
-  | "gis_region_small"
-  | "gradient_regions"
-  | "patterns";
+// type Layer =
+//   | "atlas_maps"
+//   | "fan_geology"
+//   | "photo_panels"
+//   | "cross_sections"
+//   | "faults"
+//   | "geospatial_data"
+//   | "measured_sections_all_areas"
+//   | "brushy_intersect_final2"
+//   | "fan_delivery_system"
+//   | "fieldtripstops"
+//   | "ftrip_m"
+//   | "gis_region_small"
+//   | "gradient_regions"
+//   | "patterns";
+
+const LAYER_NAMES: Record<string, string> = {
+  atlas_maps: "AtlasMaps",
+  fan_geology: "FanGeology",
+  photo_panels: "Photo_Panels",
+  cross_sections: "Cross_Sections",
+  faults: "Faults",
+  geospatial_data: "GIS_Region_Large", // example if needed
+  measured_sections_all_areas: "measured_sections_all_areas",
+  brushy_intersect_final2: "brushy_intersect_final2",
+  fan_delivery_system: "Fan_Delivery_System",
+  fieldtripstops: "FieldtripStops",
+  ftrip_m: "ftrip_m",
+  gis_region_small: "GIS_Region_Small",
+  gradient_regions: "Gradient_Regions",
+  patterns: "patterns",
+};
 
 function App() {
   const [geojson, setGeojson] = useState<GeoJSON.FeatureCollection | null>(
@@ -51,7 +68,7 @@ function App() {
 
       for (const layer of selectedLayers) {
         try {
-          const data = await GeologicDataService.getFeaturesApiV1GeologicTableNameGet(layer);
+          const data = await GeologicDataService.getFeaturesApiV1GeologicTableNameGet(LAYER_NAMES[layer]);
           console.log({ data });
           layerData.push(data);
         } catch (error) {
