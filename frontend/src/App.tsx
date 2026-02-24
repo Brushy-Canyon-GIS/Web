@@ -51,9 +51,8 @@ function App() {
       for (const layer of selectedLayers) {
         try {
           const data = await GeologicDataService.getFeaturesApiV1GeologicTableNameGet(layer);
-          const parsedData = typeof data === "string" ? JSON.parse(data) : data;
-          console.log({ parsedData });
-          layerData.push(parsedData);
+          console.log({ data });
+          layerData.push(data);
         } catch (error) {
           console.error(`Error fetching ${layer}:`, error);
         }
