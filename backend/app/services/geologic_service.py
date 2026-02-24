@@ -73,7 +73,7 @@ class GeologicDataService:
             'features', COALESCE(json_agg(
                 json_build_object(
                     'type', 'Feature',
-                    'geometry', geometry,
+                    'geometry', ST_AsGeoJSON(geometry)::json,
                     'properties', jsonb_build_object(
                         'id', id,
                         'name', name,
@@ -85,9 +85,12 @@ class GeologicDataService:
                 )
             ), '[]'::json)
         ) AS geojson
-        FROM geojson_layers
-        WHERE {where_sql}
-        LIMIT :limit OFFSET :offset
+        FROM (
+            SELECT *
+            FROM geojson_layers
+            WHERE {where_sql}
+            LIMIT :limit OFFSET :offset
+        ) AS paginated
         """
         values["limit"] = filters.limit
         values["offset"] = filters.offset
