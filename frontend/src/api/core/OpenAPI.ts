@@ -20,11 +20,7 @@ export type OpenAPIConfig = {
 };
 
 export const OpenAPI: OpenAPIConfig = {
-<<<<<<< HEAD
     BASE: "https://api.outcropanalog.com",
-=======
-    BASE: 'http://18.222.134.134:8000',
->>>>>>> 1b6ee79 (add generated api client)
     VERSION: '1.0.0',
     WITH_CREDENTIALS: false,
     CREDENTIALS: 'include',
