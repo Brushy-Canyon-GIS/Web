@@ -57,18 +57,18 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
       if (!map.current) return;
 
       // Normalize properties for color and labels
-      const normalizedGeojson = {
-        ...geojson,
-        features: geojson.features.map((f) => ({
-          ...f,
-          properties: {
-            ...(f.properties || {}),
-            CYCLE: f.properties?.CYCLE || f.properties?.cycle || "Unknown",
-            Name: f.properties?.Name || f.properties?.name || "",
-            NAME: f.properties?.NAME || "",
-          },
-        })),
-      };
+      // const normalizedGeojson = {
+      //   ...geojson,
+      //   features: geojson.features.map((f) => ({
+      //     ...f,
+      //     properties: {
+      //       ...(f.properties || {}),
+      //       CYCLE: f.properties?.CYCLE || f.properties?.cycle || "Unknown",
+      //       Name: f.properties?.Name || f.properties?.name || "",
+      //       NAME: f.properties?.NAME || "",
+      //     },
+      //   })),
+      // };
 
       // Build color expression for "CYCLE"
       const colorExpression: any = ["match", ["get", "CYCLE"]];
@@ -79,12 +79,12 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
 
       if (map.current.getSource("geojson-data")) {
         (map.current.getSource("geojson-data") as mapboxgl.GeoJSONSource).setData(
-          normalizedGeojson
+          geojson
         );
       } else {
         map.current.addSource("geojson-data", {
           type: "geojson",
-          data: normalizedGeojson,
+          data: geojson,
         });
 
         // Fills for polygons
