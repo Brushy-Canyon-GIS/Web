@@ -3,8 +3,8 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import fanGeologyColors from "../fanGeology.json";
 import { PhotosService } from "../api/services/PhotosService";
-
-const API_BASE_URL = "https://api.outcropanalog.com";
+import { OpenAPI } from "../api/core/OpenAPI";
+OpenAPI.BASE = "https://api.outcropanalog.com";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
@@ -153,13 +153,12 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
           map.current!.on("click", layerId, async (e) => {
             if (e?.features?.[0]?.properties && onFeatureClick) {
               const properties = e.features[0].properties;
+
               // grab photo
               if (properties.Hyperlink && properties.Hyperlink !== null) {
                 try {
-                  // Make sure PhotosService points to your live backend
                   const photoData = await PhotosService.getPhotoUrlByNameApiV1PhotosPhotourlPhotoNameGet(
-                    properties.Hyperlink,
-                    { basePath: API_BASE_URL } // <-- explicitly set base URL if needed
+                    properties.Hyperlink
                   );
 
                   onFeatureClick({ properties, photoUrl: photoData?.url || null });

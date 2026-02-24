@@ -3,8 +3,10 @@ import "./App.css";
 import Map from "./components/Map";
 import NavBar from "./components/Nav";
 import FeatureDetails from "./components/FeatureDetails";
+import { GeologicDataService } from "./api/services/GeologicDataService";
+import { OpenAPI } from "./api/core/OpenAPI";
 
-const API_BASE_URL = "https://api.outcropanalog.com";
+OpenAPI.BASE = "https://api.outcropanalog.com";
 
 type Layer =
   | "atlas_maps"
@@ -49,14 +51,8 @@ function App() {
 
       for (const layer of selectedLayers) {
         try {
-          // Make sure the layer name matches exactly what's in the DB
-          const layerName = layer; // e.g., "AtlasMaps" instead of "atlas_maps"
-
-          const res = await fetch(`${API_BASE_URL}/api/v1/geologic/${layerName}`);
-          if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-
-          const data = await res.json();
-          console.log({ layerName, data });
+          const data = await GeologicDataService.getFeaturesApiV1GeologicTableNameGet(layer);
+          console.log({ data });
           layerData.push(data);
         } catch (error) {
           console.error(`Error fetching ${layer}:`, error);

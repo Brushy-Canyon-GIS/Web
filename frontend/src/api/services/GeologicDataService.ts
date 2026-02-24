@@ -8,6 +8,7 @@ import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
 import { request as __request } from '../core/request';
 export class GeologicDataService {
+
     /**
      * List all available geologic data tables
      * Returns a list of all available geologic data tables with metadata.
