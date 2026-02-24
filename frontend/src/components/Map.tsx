@@ -17,13 +17,15 @@ interface MapProps {
   }) => void;
 }
 
+// Default colors for layers without "CYCLE"
+const DEFAULT_COLOR = "#888888";
+
 const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const mapLoaded = useRef(false);
 
-  const colors =  fanGeologyColors;
-
+  const colors = fanGeologyColors;
 
   useEffect(() => {
     if (map.current) return;
@@ -31,7 +33,6 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
     map.current = new mapboxgl.Map({
       container: mapContainer.current!,
       style: "mapbox://styles/mapbox/streets-v11",
-      //style: "mapbox://styles/mapbox/standard-satellite",
       center: [-104.834853, 31.828347],
       zoom: 8,
     });
@@ -41,7 +42,6 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
     map.current.on("load", () => {
       mapLoaded.current = true;
     });
-
 
     return () => {
       map.current?.remove();
@@ -56,26 +56,38 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
     const addOrUpdateSource = () => {
       if (!map.current) return;
 
+      // Normalize properties for color and labels
+      const normalizedGeojson = {
+        ...geojson,
+        features: geojson.features.map((f) => ({
+          ...f,
+          properties: {
+            ...(f.properties || {}),
+            CYCLE: f.properties?.CYCLE || f.properties?.cycle || "Unknown",
+            Name: f.properties?.Name || f.properties?.name || "",
+            NAME: f.properties?.NAME || "",
+          },
+        })),
+      };
+
+      // Build color expression for "CYCLE"
       const colorExpression: any = ["match", ["get", "CYCLE"]];
-      
       Object.entries(colors).forEach(([cycle, color]) => {
         colorExpression.push(cycle, color);
       });
-      
-      colorExpression.push("#CCCCCC");
+      colorExpression.push(DEFAULT_COLOR);
 
       if (map.current.getSource("geojson-data")) {
-        const source = map.current.getSource(
-          "geojson-data"
-        ) as mapboxgl.GeoJSONSource;
-        source.setData(geojson);
+        (map.current.getSource("geojson-data") as mapboxgl.GeoJSONSource).setData(
+          normalizedGeojson
+        );
       } else {
         map.current.addSource("geojson-data", {
           type: "geojson",
-          data: geojson,
+          data: normalizedGeojson,
         });
 
-
+        // Fills for polygons
         map.current.addLayer({
           id: "geojson-fill",
           type: "fill",
@@ -87,7 +99,7 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
           },
         });
 
-
+        // Lines
         map.current.addLayer({
           id: "geojson-line",
           type: "line",
@@ -98,42 +110,7 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
           },
         });
 
-        // feature labeling by Cycle
-        map.current.addLayer({
-          id: "geojson-cycle",
-          type: "symbol",
-          source: "geojson-data",
-
-          layout: {
-            "text-field": ["get", "CYCLE"],
-            "text-size": 12,
-          },
-        });
-
-        // feature labeling by Name
-        map.current.addLayer({
-          id: "geojson-name1",
-          type: "symbol",
-          source: "geojson-data",
-
-          layout: {
-            "text-field": ["get", "Name"],
-            "text-size": 12,
-          },
-        });
-
-        // feature labeling by NAME
-        map.current.addLayer({
-          id: "geojson-name2",
-          type: "symbol",
-          source: "geojson-data",
-
-          layout: {
-            "text-field": ["get", "NAME"],
-            "text-size": 12,
-          },
-        });
-
+        // Circles for points
         map.current.addLayer({
           id: "geojson-circle",
           type: "circle",
@@ -147,14 +124,35 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
           },
         });
 
+        // Labels by Cycle
+        map.current.addLayer({
+          id: "geojson-label-cycle",
+          type: "symbol",
+          source: "geojson-data",
+          layout: {
+            "text-field": ["coalesce", ["get", "CYCLE"], ""],
+            "text-size": 12,
+          },
+        });
+
+        // Labels by Name
+        map.current.addLayer({
+          id: "geojson-label-name",
+          type: "symbol",
+          source: "geojson-data",
+          layout: {
+            "text-field": ["coalesce", ["get", "Name"], ["get", "NAME"], ""],
+            "text-size": 12,
+          },
+        });
+
         const layerIds = ["geojson-fill", "geojson-line", "geojson-circle"];
 
-          layerIds.forEach((layerId) => {
-
+        layerIds.forEach((layerId) => {
           map.current!.on("click", layerId, async (e) => {
             if (e?.features?.[0]?.properties && onFeatureClick) {
               const properties = e.features[0].properties;
-              
+
               // grab photo
               if (properties.Hyperlink && properties.Hyperlink !== null) {
                 try {
@@ -163,42 +161,28 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
                       properties.Hyperlink
                     );
 
-               onFeatureClick({
+                  onFeatureClick({
                     properties,
-                    photoUrl: photoData?.url?.url || null,
+                    photoUrl: photoData?.url || null,
                   });
                 } catch (error) {
                   console.error("Error fetching photo URL:", error);
-
-                   onFeatureClick({
-                    properties,
-                    photoUrl: null,
-                  });
+                  onFeatureClick({ properties, photoUrl: null });
                 }
               } else {
-
-                  onFeatureClick({
-                    properties,
-                    photoUrl: null,
-                  });
+                onFeatureClick({ properties, photoUrl: null });
               }
             }
           });
 
-
           map.current!.on("mouseenter", layerId, () => {
-            if (map.current) {
-              map.current.getCanvas().style.cursor = "pointer";
-            }
+            if (map.current) map.current.getCanvas().style.cursor = "pointer";
           });
 
           map.current!.on("mouseleave", layerId, () => {
-            if (map.current) {
-              map.current.getCanvas().style.cursor = "";
-            }
+            if (map.current) map.current.getCanvas().style.cursor = "";
           });
         });
-
       }
     };
 

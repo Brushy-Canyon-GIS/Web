@@ -3,7 +3,7 @@ import "./App.css";
 import Map from "./components/Map";
 import NavBar from "./components/Nav";
 import FeatureDetails from "./components/FeatureDetails";
-// import { GeologicDataService } from "./api/services/GeologicDataService";
+import { GeologicDataService } from "./api/services/GeologicDataService";
 import { OpenAPI } from "./api/core/OpenAPI";
 
 OpenAPI.BASE = "https://api.outcropanalog.com";
@@ -50,12 +50,10 @@ function App() {
 
       for (const layer of selectedLayers) {
         try {
-          const res = await fetch(
-            `https://api.outcropanalog.com/api/v1/geologic/${layer}`
-          );
-          const data = await res.json();
-          console.log({ data });
-          layerData.push(data);
+          const data = await GeologicDataService.getFeaturesApiV1GeologicTableNameGet(layer);
+          const parsedData = typeof data === "string" ? JSON.parse(data) : data;
+          console.log({ parsedData });
+          layerData.push(parsedData);
         } catch (error) {
           console.error(`Error fetching ${layer}:`, error);
         }
