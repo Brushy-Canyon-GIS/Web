@@ -3,7 +3,7 @@ import "./App.css";
 import Map from "./components/Map";
 import NavBar from "./components/Nav";
 import FeatureDetails from "./components/FeatureDetails";
-import { GeologicDataService } from "./api/services/GeologicDataService";
+// import { GeologicDataService } from "./api/services/GeologicDataService";
 import { OpenAPI } from "./api/core/OpenAPI";
 
 OpenAPI.BASE = "https://api.outcropanalog.com";
