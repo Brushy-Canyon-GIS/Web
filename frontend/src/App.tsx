@@ -51,7 +51,7 @@ function App() {
       for (const layer of selectedLayers) {
         try {
           const res = await fetch(
-            `http://api.outcropanalog.com/api/v1/geologic/${layer}`
+            `https://api.outcropanalog.com/api/v1/geologic/${layer}`
           );
           const data = await res.json();
           console.log({ data });
