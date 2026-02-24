@@ -50,7 +50,10 @@ function App() {
 
       for (const layer of selectedLayers) {
         try {
-          const data = await GeologicDataService.getFeaturesApiV1GeologicTableNameGet(layer);
+          const res = await fetch(
+            `http://api.outcropanalog.com/api/v1/geologic/${layer}`
+          );
+          const data = await res.json();
           console.log({ data });
           layerData.push(data);
         } catch (error) {
