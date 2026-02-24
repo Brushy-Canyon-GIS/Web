@@ -44,7 +44,7 @@ const  NavBar = () => {
               flexGrow: 1
             }}
           >
-            Brushy Canyon
+            Outcrop Analog
           </Typography>
           {user ? (
           <>
