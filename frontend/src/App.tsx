@@ -8,22 +8,6 @@ import { OpenAPI } from "./api/core/OpenAPI";
 
 OpenAPI.BASE = "https://api.outcropanalog.com";
 
-// type Layer =
-//   | "atlas_maps"
-//   | "fan_geology"
-//   | "photo_panels"
-//   | "cross_sections"
-//   | "faults"
-//   | "geospatial_data"
-//   | "measured_sections_all_areas"
-//   | "brushy_intersect_final2"
-//   | "fan_delivery_system"
-//   | "fieldtripstops"
-//   | "ftrip_m"
-//   | "gis_region_small"
-//   | "gradient_regions"
-//   | "patterns";
-
 type Layer =
   | "AtlasMaps"
   | "FanGeology"
@@ -207,15 +191,6 @@ function App() {
                   />
                   Field Trip Markers
                 </label>
-                {/* <label className="layer-option">
-                  <input
-                    type="checkbox"
-                    value="geospatial_data"
-                    onChange={() => handleLayerChange("Geospatial_data")}
-                    checked={selectedLayers.includes("Geospatial_data")}
-                  />
-                  Geospatial Data (General)
-                </label> */}
                 <label className="layer-option">
                   <input
                     type="checkbox"
