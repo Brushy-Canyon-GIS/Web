@@ -24,22 +24,20 @@ OpenAPI.BASE = "https://api.outcropanalog.com";
 //   | "gradient_regions"
 //   | "patterns";
 
-const LAYER_NAMES: Record<string, string> = {
-  atlas_maps: "AtlasMaps",
-  fan_geology: "FanGeology",
-  photo_panels: "Photo_Panels",
-  cross_sections: "Cross_Sections",
-  faults: "Faults",
-  geospatial_data: "GIS_Region_Large", // example if needed
-  measured_sections_all_areas: "measured_sections_all_areas",
-  brushy_intersect_final2: "brushy_intersect_final2",
-  fan_delivery_system: "Fan_Delivery_System",
-  fieldtripstops: "FieldtripStops",
-  ftrip_m: "ftrip_m",
-  gis_region_small: "GIS_Region_Small",
-  gradient_regions: "Gradient_Regions",
-  patterns: "patterns",
-};
+type Layer =
+  | "AtlasMaps"
+  | "FanGeology"
+  | "Photo_Panels"
+  | "Cross_Sections"
+  | "Faults"
+  | "measured_sections_all_areas"
+  | "brushy_intersect_final2"
+  | "Fan_Delivery_System"
+  | "FieldtripStops"
+  | "ftrip_m"
+  | "GIS_Region_Small"
+  | "Gradient_Regions"
+  | "patterns";
 
 function App() {
   const [geojson, setGeojson] = useState<GeoJSON.FeatureCollection | null>(
@@ -68,7 +66,7 @@ function App() {
 
       for (const layer of selectedLayers) {
         try {
-          const data = await GeologicDataService.getFeaturesApiV1GeologicTableNameGet(LAYER_NAMES[layer]);
+          const data = await GeologicDataService.getFeaturesApiV1GeologicTableNameGet(layer);
           console.log({ data });
           layerData.push(data);
         } catch (error) {
@@ -107,9 +105,9 @@ function App() {
                 <label className="layer-option">
                   <input
                     type="checkbox"
-                    value="atlasMap"
-                    onChange={() => handleLayerChange("atlas_maps")}
-                    checked={selectedLayers.includes("atlas_maps")}
+                    value="atlasMaps"
+                    onChange={() => handleLayerChange("AtlasMaps")}
+                    checked={selectedLayers.includes("AtlasMaps")}
                   />
                   Atlas Map
                 </label>
@@ -118,8 +116,8 @@ function App() {
                   <input
                     type="checkbox"
                     value="fanGeology"
-                    onChange={() => handleLayerChange("fan_geology")}
-                    checked={selectedLayers.includes("fan_geology")}
+                    onChange={() => handleLayerChange("FanGeology")}
+                    checked={selectedLayers.includes("FanGeology")}
                   />
                   Fan Geology
                 </label>
@@ -128,8 +126,8 @@ function App() {
                   <input
                     type="checkbox"
                     value="photoPanels"
-                    onChange={() => handleLayerChange("photo_panels")}
-                    checked={selectedLayers.includes("photo_panels")}
+                    onChange={() => handleLayerChange("Photo_Panels")}
+                    checked={selectedLayers.includes("Photo_Panels")}
                   />
                   Photo Panels
                 </label>
@@ -138,8 +136,8 @@ function App() {
                   <input
                     type="checkbox"
                     value="cross_sections"
-                    onChange={() => handleLayerChange("cross_sections")}
-                    checked={selectedLayers.includes("cross_sections")}
+                    onChange={() => handleLayerChange("Cross_Sections")}
+                    checked={selectedLayers.includes("Cross_Sections")}
                   />
                   Cross Sections
                 </label>
@@ -148,8 +146,8 @@ function App() {
                   <input
                     type="checkbox"
                     value="faults"
-                    onChange={() => handleLayerChange("faults")}
-                    checked={selectedLayers.includes("faults")}
+                    onChange={() => handleLayerChange("Faults")}
+                    checked={selectedLayers.includes("Faults")}
                   />
                   Faults
                 </label>
@@ -184,8 +182,8 @@ function App() {
                   <input
                     type="checkbox"
                     value="fan_delivery_system"
-                    onChange={() => handleLayerChange("fan_delivery_system")}
-                    checked={selectedLayers.includes("fan_delivery_system")}
+                    onChange={() => handleLayerChange("Fan_Delivery_System")}
+                    checked={selectedLayers.includes("Fan_Delivery_System")}
                   />
                   Fan Delivery System
                 </label>
@@ -194,8 +192,8 @@ function App() {
                   <input
                     type="checkbox"
                     value="fieldtripstops"
-                    onChange={() => handleLayerChange("fieldtripstops")}
-                    checked={selectedLayers.includes("fieldtripstops")}
+                    onChange={() => handleLayerChange("FieldtripStops")}
+                    checked={selectedLayers.includes("FieldtripStops")}
                   />
                   Field Trip Stops
                 </label>
@@ -208,21 +206,21 @@ function App() {
                   />
                   Field Trip Markers
                 </label>
-                <label className="layer-option">
+                {/* <label className="layer-option">
                   <input
                     type="checkbox"
                     value="geospatial_data"
-                    onChange={() => handleLayerChange("geospatial_data")}
-                    checked={selectedLayers.includes("geospatial_data")}
+                    onChange={() => handleLayerChange("Geospatial_data")}
+                    checked={selectedLayers.includes("Geospatial_data")}
                   />
                   Geospatial Data (General)
-                </label>
+                </label> */}
                 <label className="layer-option">
                   <input
                     type="checkbox"
                     value="gis_region_small"
-                    onChange={() => handleLayerChange("gis_region_small")}
-                    checked={selectedLayers.includes("gis_region_small")}
+                    onChange={() => handleLayerChange("GIS_Region_Small")}
+                    checked={selectedLayers.includes("GIS_Region_Small")}
                   />
                   Small GIS Regions
                 </label>
@@ -230,8 +228,8 @@ function App() {
                   <input
                     type="checkbox"
                     value="gradient_regions"
-                    onChange={() => handleLayerChange("gradient_regions")}
-                    checked={selectedLayers.includes("gradient_regions")}
+                    onChange={() => handleLayerChange("Gradient_Regions")}
+                    checked={selectedLayers.includes("Gradient_Regions")}
                   />
                   Gradient Regions
                 </label>
