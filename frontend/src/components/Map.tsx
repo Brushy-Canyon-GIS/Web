@@ -3,9 +3,6 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import fanGeologyColors from "../fanGeology.json";
 // import { PhotosService } from "../api/services/PhotosService";
-import { OpenAPI } from "../api/core/OpenAPI";
-
-OpenAPI.BASE = "https://api.outcropanalog.com";
 
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
