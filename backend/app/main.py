@@ -5,11 +5,9 @@ from contextlib import asynccontextmanager
 from dotenv import load_dotenv
 load_dotenv()
 
-from app.database import database
-from app.config import settings
-
-from app.routers import geologic_router, photos_router
-from app.routers.routers import router as s3_router
+from .database import database
+from .config import settings
+from .routers import geologic_router, photos_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -33,16 +31,11 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Include the S3 router
-app.include_router(s3_router, prefix=settings.api_v1_prefix)
-
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "https://outcropanalog.com",
-        "https://www.outcropanalog.com",
-    ],
+    # allow_origins=settings.cors_origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

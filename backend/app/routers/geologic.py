@@ -18,8 +18,8 @@ router = APIRouter(prefix="/geologic", tags=["Geologic Data"])
 
 
 def get_service() -> GeologicDataService:
-    """Dependency to get S3-based service instance."""
-    return GeologicDataService()
+    """Dependency to get service instance."""
+    return GeologicDataService(database)
 
 
 @router.get(

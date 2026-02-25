@@ -1,102 +1,197 @@
-from typing import List, Optional
-from app.database import database
-from app.models.geologic import FilterParams, GeoJSONFeatureCollection
+"""
+Service layer for geologic data operations.
+Encapsulates business logic and database interactions.
+"""
+from typing import Dict, List, Optional, Any
+from databases import Database
+
+from app.models.geologic import FilterParams, TableInfo, GeoJSONFeatureCollection
+from app.utils.query_builder import build_geojson_query, get_table_display_name
 
 
 class GeologicDataService:
     """
-    Service for fetching geologic data directly from the database.
-    Works with the geojson_layers table.
+    Service for handling geologic data queries and operations.
     """
-
-    async def get_available_tables(self) -> List[str]:
+    
+    # Tables to exclude from public API
+    EXCLUDED_TABLES = {
+        'spatial_ref_sys',  # PostGIS system table
+        'geometry_columns',  # PostGIS system table
+        'geography_columns',  # PostGIS system table
+    }
+    
+    def __init__(self, database: Database):
         """
-        Return all distinct layer names in the database.
+        Initialize the service with a database connection.
+        
+        Args:
+            database: Database instance
         """
-        query = "SELECT DISTINCT layer_name FROM geojson_layers ORDER BY layer_name"
-        rows = await database.fetch_all(query)
-        return [row['layer_name'] for row in rows]
-
-    async def get_table_info(self, table_name: str) -> Optional[dict]:
+        self.db = database
+    
+    async def get_available_tables(self) -> List[TableInfo]:
         """
-        Return metadata about a specific table (layer_name).
+        Get list of all available geologic data tables.
+        
+        Returns:
+            List of TableInfo objects
         """
-        query = """
-        SELECT COUNT(*) AS total,
-               MIN(id) AS min_id,
-               MAX(id) AS max_id
-        FROM geojson_layers
-        WHERE LOWER(layer_name) = LOWER(:table_name)
-        """
-        result = await database.fetch_one(query, values={"table_name": table_name})
-        if result and result["total"] > 0:
-            return {
-                "name": table_name,
-                "total": result["total"],
-                "min_id": result["min_id"],
-                "max_id": result["max_id"]
-            }
-        return None
-
-    async def get_features_geojson(
-        self, table_name: str, filters: FilterParams
-    ) -> GeoJSONFeatureCollection:
-        """
-        Return features from a given layer as GeoJSON FeatureCollection.
-        Supports limit, offset, and basic property filters.
-        """
-        # Build WHERE clause for optional filters
-        where_clauses = ["LOWER(layer_name) = LOWER(:table_name)"]
-        values = {"table_name": table_name}
-
-        if filters.name:
-            where_clauses.append("LOWER(name) LIKE LOWER(:name)")
-            values["name"] = f"%{filters.name}%"
-        if filters.map_symbol:
-            where_clauses.append("map_symbol = :map_symbol")
-            values["map_symbol"] = filters.map_symbol
-        if filters.feature_type:
-            where_clauses.append("feature_type = :feature_type")
-            values["feature_type"] = filters.feature_type
-        if filters.region:
-            where_clauses.append("region = :region")
-            values["region"] = filters.region
-        if filters.fan_id:
-            where_clauses.append("fan_id = :fan_id")
-            values["fan_id"] = filters.fan_id
-
-        where_sql = " AND ".join(where_clauses)
-
+        # Build excluded tables list for SQL
+        excluded_list = ', '.join([f"'{table}'" for table in self.EXCLUDED_TABLES])
+        
         query = f"""
-        SELECT json_build_object(
-            'type', 'FeatureCollection',
-            'features', COALESCE(json_agg(
-                json_build_object(
-                    'type', 'Feature',
-                    'geometry', ST_AsGeoJSON(geometry)::json,
-                    'properties', jsonb_build_object(
-                        'id', id,
-                        'name', name,
-                        'map_symbol', map_symbol,
-                        'feature_type', feature_type,
-                        'region', region,
-                        'fan_id', fan_id
-                    )
-                )
-            ), '[]'::json)
-        ) AS geojson
-        FROM (
-            SELECT *
-            FROM geojson_layers
-            WHERE {where_sql}
-            LIMIT :limit OFFSET :offset
-        ) AS paginated
+        SELECT 
+            t.table_name,
+            gc.type as geometry_type,
+            (SELECT COUNT(*) FROM information_schema.columns 
+             WHERE table_name = t.table_name AND table_schema = 'public') as column_count
+        FROM information_schema.tables t
+        LEFT JOIN geometry_columns gc 
+            ON gc.f_table_name = t.table_name 
+            AND gc.f_table_schema = 'public'
+        WHERE t.table_schema = 'public' 
+        AND t.table_type = 'BASE TABLE'
+        AND t.table_name NOT IN ({excluded_list})
+        ORDER BY t.table_name;
         """
-        values["limit"] = filters.limit
-        values["offset"] = filters.offset
+        
+        results = await self.db.fetch_all(query)
+        
+        tables = []
+        for row in results:
+            table_name = row['table_name']
+            
+            # Get feature count
+            try:
+                count_result = await self.db.fetch_one(
+                    f'SELECT COUNT(*) as count FROM "{table_name}"'
+                )
+                feature_count = count_result['count'] if count_result else 0
+            except Exception:
+                feature_count = 0
+            
+            tables.append(TableInfo(
+                name=table_name,
+                display_name=get_table_display_name(table_name),
+                feature_count=feature_count,
+                geometry_type=row['geometry_type']
+            ))
+        
+        return tables
+    
+    async def get_features_geojson(
+        self,
+        table_name: str,
+        filters: Optional[FilterParams] = None
+    ) -> Dict[str, Any]:
+        """
+        Get features from a table as GeoJSON.
+        
+        Args:
+            table_name: Name of the table to query
+            filters: Optional filter parameters
+            
+        Returns:
+            GeoJSON FeatureCollection as dict
+            
+        Raises:
+            ValueError: If table doesn't exist or is excluded
+        """
+        # Validate table exists and is not excluded
+        if table_name in self.EXCLUDED_TABLES:
+            raise ValueError(f"Table '{table_name}' is not accessible")
+        
+        # Check if table exists
+        table_check = await self.db.fetch_one(
+            """
+            SELECT table_name 
+            FROM information_schema.tables 
+            WHERE table_schema = 'public' 
+            AND table_name = :table_name
+            """,
+            values={"table_name": table_name}
+        )
+        
+        if not table_check:
+            raise ValueError(f"Table '{table_name}' does not exist")
+        
+        # Determine geometry column name
+        geom_col_query = """
+        SELECT f_geometry_column 
+        FROM geometry_columns 
+        WHERE f_table_schema = 'public' 
+        AND f_table_name = :table_name
+        LIMIT 1
+        """
+        geom_result = await self.db.fetch_one(
+            geom_col_query,
+            values={"table_name": table_name}
+        )
+        
+        geometry_column = geom_result['f_geometry_column'] if geom_result else 'geometry'
+        
+        # Build and execute query
+        query, params = build_geojson_query(
+            table_name=table_name,
+            geometry_column=geometry_column,
+            filters=filters
+        )
+        
+        result = await self.db.fetch_one(query, values=params)
+        
+        if result and result['geojson']:
+            geojson_data = result['geojson']
+            # If it's a string, parse it; otherwise return as-is
+            if isinstance(geojson_data, str):
+                import json
+                return json.loads(geojson_data)
+            return geojson_data
+        
+        # Return empty FeatureCollection if no results
+        return {
+            "type": "FeatureCollection",
+            "features": []
+        }
+    
+    async def get_table_info(self, table_name: str) -> Optional[TableInfo]:
+        """
+        Get detailed information about a specific table.
+        
+        Args:
+            table_name: Name of the table
+            
+        Returns:
+            TableInfo object or None if not found
+        """
+        if table_name in self.EXCLUDED_TABLES:
+            return None
+        
+        # Get geometry type
+        geom_query = """
+        SELECT type as geometry_type
+        FROM geometry_columns
+        WHERE f_table_schema = 'public'
+        AND f_table_name = :table_name
+        """
+        geom_result = await self.db.fetch_one(
+            geom_query,
+            values={"table_name": table_name}
+        )
+        
+        # Get feature count
+        try:
+            count_result = await self.db.fetch_one(
+                f'SELECT COUNT(*) as count FROM "{table_name}"'
+            )
+            feature_count = count_result['count'] if count_result else 0
+        except Exception:
+            return None
+        
+        return TableInfo(
+            name=table_name,
+            display_name=get_table_display_name(table_name),
+            feature_count=feature_count,
+            geometry_type=geom_result['geometry_type'] if geom_result else None
+        )
 
-        result = await database.fetch_one(query, values=values)
-        if result and result["geojson"]:
-            return result["geojson"]
-
-        return {"type": "FeatureCollection", "features": []}
