@@ -39,8 +39,10 @@ app.include_router(s3_router, prefix=settings.api_v1_prefix)
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    # allow_origins=settings.cors_origins,
-    allow_origins=["*"],
+    allow_origins=[
+        "https://outcropanalog.com",
+        "https://www.outcropanalog.com",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
