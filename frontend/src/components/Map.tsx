@@ -156,7 +156,7 @@ const Map: React.FC<MapProps> = ({ geojson, onFeatureClick }) => {
               if (properties.Hyperlink && properties.Hyperlink !== null) {
                 try {
                   const res = await fetch(
-                    `http://localhost:8000/api/v1/photos/photourl/${properties.Hyperlink}`
+                    `${import.meta.env.VITE_API_URL}/api/v1/photos/photourl/${properties.Hyperlink}`
                   );
                   const photoData = await res.json();
                   console.log({photoData})

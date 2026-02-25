@@ -48,7 +48,7 @@ function App() {
       for (const layer of selectedLayers) {
         try {
           const res = await fetch(
-            `http://localhost:8000/api/v1/geologic/${layer}`
+            `${import.meta.env.VITE_API_URL}/api/v1/geologic/${layer}`
           );
           const data = await res.json();
           console.log({ data });
