@@ -30,3 +30,10 @@ s3transfer==0.16.0
 six==1.17.0
 urllib3==2.6.3
 
+# Cross-plotting and data analysis
+pandas>=2.2.0
+matplotlib>=3.8.0
+numpy>=1.26.0
+rapidfuzz>=3.0.0
+
+

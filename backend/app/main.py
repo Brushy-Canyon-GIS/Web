@@ -7,20 +7,28 @@ load_dotenv()
 
 from .database import database
 from .config import settings
-from .routers import geologic_router, photos_router
+from .routers import geologic_router, photos_router, cross_plot_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
     Lifespan context manager for startup and shutdown events.
+    Tolerates database connection failures so non-DB endpoints (e.g. cross plots)
+    work when Postgres/Supabase is unreachable.
     """
     # Startup
-    await database.connect()
-    print("Database connected")
+    try:
+        await database.connect()
+        print("Database connected")
+    except Exception as exc:
+        print(f"WARNING: Database connection failed (continuing without DB): {exc}")
     yield
     # Shutdown
-    await database.disconnect()
-    print("Database disconnected")
+    try:
+        await database.disconnect()
+        print("Database disconnected")
+    except Exception as exc:
+        print(f"WARNING: Database disconnect failed: {exc}")
 
 
 # Initialize FastAPI app
@@ -44,7 +52,7 @@ app.add_middleware(
 # Include routers
 app.include_router(geologic_router, prefix=settings.api_v1_prefix)
 app.include_router(photos_router, prefix=settings.api_v1_prefix)
-
+app.include_router(cross_plot_router, prefix=settings.api_v1_prefix)
 
 @app.get("/", tags=["Root"])
 async def root():
