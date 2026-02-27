@@ -199,7 +199,7 @@ function App() {
                     onChange={() => handleLayerChange("gis_region_large")}
                     checked={selectedLayers.includes("gis_region_large")}
                   />
-                  Geospatial Data (General)
+                  Large GIS Regions
                 </label>
                 <label className="layer-option">
                   <input

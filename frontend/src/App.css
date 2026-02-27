@@ -21,7 +21,7 @@ body {
 
 /* Options Panel - 30% width */
 .options-panel {
-  width: 20%;
+  width: 30%;
   padding: 2rem;
   overflow-y: auto;
   background-color: #ffffff;
@@ -47,7 +47,7 @@ body {
   align-items: center;
   color: #333;
   cursor: pointer;
-  padding: 0.2rem 0.4rem;
+  padding: 0.2rem;
   border-radius: 4px;
   transition: background-color 0.2s;
 }
@@ -57,7 +57,7 @@ body {
 }
 
 .layer-option input[type="checkbox"] {
-  margin-right: 0.4rem;
+  margin-right: 0.2rem;
   cursor: pointer;
 }
 
