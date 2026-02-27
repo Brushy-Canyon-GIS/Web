@@ -113,8 +113,8 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current!,
-      style: "mapbox://styles/mapbox/streets-v11",
-      //style: "mapbox://styles/mapbox/standard-satellite",
+      //style: "mapbox://styles/mapbox/streets-v11",
+      style: "mapbox://styles/mapbox/standard-satellite",
       center: [-104.834853, 31.828347],
       zoom: 8,
     });
