@@ -10,7 +10,7 @@ type Layer =
   | "photo_panels"
   | "cross_sections"
   | "faults"
-  | "geospatial_data"
+  | "gis_region_large"
   | "measured_sections_all_areas"
   | "brushy_intersect_final2"
   | "fan_delivery_system"
@@ -18,7 +18,9 @@ type Layer =
   | "ftrip_m"
   | "gis_region_small"
   | "gradient_regions"
-  | "patterns";
+  | "patterns"
+  | "cutoffmeasuredsections";
+  
 
 function App() {
   const [geojson, setGeojson] = useState<GeoJSON.FeatureCollection | null>(
@@ -54,7 +56,7 @@ function App() {
           console.log({ data });
           layerData.push(data);
         } catch (error) {
-          console.error(`Error fetching ${layer}:`, error);
+          console.error(`Error fetching ${layer}`, error);
         }
       }
 
@@ -84,7 +86,7 @@ function App() {
             />
           ) : (
             <>
-              <h3 className="options-title">Map Layers</h3>
+              <h3 className="options-title">Map Layers for Brushy Canyon</h3>
               <div className="options-list">
                 <label className="layer-option">
                   <input
@@ -193,9 +195,9 @@ function App() {
                 <label className="layer-option">
                   <input
                     type="checkbox"
-                    value="geospatial_data"
-                    onChange={() => handleLayerChange("geospatial_data")}
-                    checked={selectedLayers.includes("geospatial_data")}
+                    value="gis_region_large"
+                    onChange={() => handleLayerChange("gis_region_large")}
+                    checked={selectedLayers.includes("gis_region_large")}
                   />
                   Geospatial Data (General)
                 </label>
@@ -225,6 +227,15 @@ function App() {
                     checked={selectedLayers.includes("patterns")}
                   />
                   Patterns
+                </label>
+                <label className="layer-option">
+                  <input
+                    type="checkbox"
+                    value="cutoffmeasuredsections"
+                    onChange={() => handleLayerChange("cutoffmeasuredsections")}
+                    checked={selectedLayers.includes("cutoffmeasuredsections")}
+                  />
+                  Cut Off Measured Sections
                 </label>
               </div>
             </>

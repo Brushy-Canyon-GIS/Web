@@ -47,7 +47,7 @@ body {
   align-items: center;
   color: #333;
   cursor: pointer;
-  padding: 0.5rem;
+  padding: 0.2rem 0.4rem;
   border-radius: 4px;
   transition: background-color 0.2s;
 }
@@ -57,7 +57,7 @@ body {
 }
 
 .layer-option input[type="checkbox"] {
-  margin-right: 0.75rem;
+  margin-right: 0.4rem;
   cursor: pointer;
 }
 

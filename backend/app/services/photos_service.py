@@ -56,7 +56,10 @@ class PhotosService:
         """
         geom_col = await self.get_geometry_column()
         
-        where_clause = ""
+        where_clause = """
+        WHERE "Hyperlink" IS NOT NULL
+          AND TRIM(CAST("Hyperlink" AS TEXT)) <> ''
+        """
         params = {"limit": limit, "offset": offset}
         
         if name:
@@ -196,6 +199,8 @@ class PhotosService:
             "{geom_col}",
             ST_MakeEnvelope(:min_lng, :min_lat, :max_lng, :max_lat, 4326)
         )
+        AND "Hyperlink" IS NOT NULL
+        AND TRIM(CAST("Hyperlink" AS TEXT)) <> ''
         ORDER BY "ID"
         LIMIT :limit OFFSET :offset
         """
@@ -296,6 +301,3 @@ class PhotosService:
         result = await self.db.fetch_one(query, {"name": name})
 
         return result
-        
-        
-
