@@ -138,6 +138,34 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
 
     const addOrUpdateSource = () => {
       if (!map.current) return;
+      if (!map.current.hasImage("photo-panel-pin")) {
+        const size = 40;
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d");
+
+        if (ctx) {
+          ctx.clearRect(0, 0, size, size);
+          ctx.beginPath();
+          ctx.arc(size / 2, 13, 9, 0, Math.PI * 2);
+          ctx.fillStyle = "#D1495B";
+          ctx.fill();
+          ctx.beginPath();
+          ctx.moveTo(size / 2, 30);
+          ctx.lineTo(size / 2 - 7, 17);
+          ctx.lineTo(size / 2 + 7, 17);
+          ctx.closePath();
+          ctx.fillStyle = "#D1495B";
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(size / 2, 13, 3, 0, Math.PI * 2);
+          ctx.fillStyle = "#FFFFFF";
+          ctx.fill();
+          const imageData = ctx.getImageData(0, 0, size, size);
+          map.current.addImage("photo-panel-pin", imageData, { pixelRatio: 2 });
+        }
+      }
 
       if (!map.current.hasImage("photo-panel-pin")) {
         const size = 40;
@@ -340,7 +368,7 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
               if (properties.Hyperlink && properties.Hyperlink !== null) {
                 try {
                   const res = await fetch(
-                    `http://localhost:8000/api/v1/photos/photourl/${properties.Hyperlink}`
+                    `${import.meta.env.VITE_API_URL}/api/v1/photos/photourl/${properties.Hyperlink}`
                   );
                   const photoData = await res.json();
                   console.log({photoData})
@@ -413,7 +441,7 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
             if (properties.Hyperlink && properties.Hyperlink !== null) {
               try {
                 const res = await fetch(
-                  `http://localhost:8000/api/v1/photos/photourl/${properties.Hyperlink}`
+                  `${import.meta.env.VITE_API_URL}/api/v1/photos/photourl/${properties.Hyperlink}`
                 );
                 const photoData = await res.json();
 
@@ -474,7 +502,7 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
     } else {
       map.current.on("load", addOrUpdateSource);
     }
-  }, [geojson, colors, showPhotoPanels]);
+  }, [geojson, showPhotoPanels, colors]);
 
   return <div ref={mapContainer} style={{ width: "100%", height: "100%" }} />;
 };

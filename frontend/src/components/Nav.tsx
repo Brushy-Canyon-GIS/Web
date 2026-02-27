@@ -11,7 +11,7 @@ import Container from '@mui/material/Container';
 import Link from '@mui/material/Link'
 import { useAuth } from '../contexts/AuthContext';
 import Button from '@mui/material/Button';
-import { handleSignOut } from '../utils/auth';
+// import { handleSignOut } from '../utils/auth';
 
 
 
@@ -44,13 +44,13 @@ const  NavBar = () => {
               flexGrow: 1
             }}
           >
-            Brushy Canyon
+            Outcrop Analog
           </Typography>
           {user ? (
           <>
-            <Button color="inherit" variant="outlined" sx={roundedButtonStyle} onClick={handleSignOut}>
+            {/* <Button color="inherit" variant="outlined" sx={roundedButtonStyle} onClick={handleSignOut}>
               Sign Out
-            </Button>
+            </Button> */}
           </>
         ) : (
           <>
