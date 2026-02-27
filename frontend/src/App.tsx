@@ -53,6 +53,13 @@ function App() {
             `${import.meta.env.VITE_API_URL}/api/v1/geologic/${layer}`
           );
           const data = await res.json();
+          data.features = (data.features || []).map((feature: any) => ({
+            ...feature,
+            properties: {
+              ...(feature.properties || {}),
+              __layer: layer,
+            },
+          }));
           console.log({ data });
           layerData.push(data);
         } catch (error) {
@@ -243,7 +250,11 @@ function App() {
       </div>
 
           <div className="map-container">
-            <Map geojson={geojson} onFeatureClick={setSelectedFeature} />
+            <Map
+              geojson={geojson}
+              onFeatureClick={setSelectedFeature}
+              showPhotoPanels={selectedLayers.includes("photo_panels")}
+            />
           </div>
         </div>
     </>

@@ -199,8 +199,8 @@ class PhotosService:
             "{geom_col}",
             ST_MakeEnvelope(:min_lng, :min_lat, :max_lng, :max_lat, 4326)
         )
-        AND "Hyperlink" IS NOT NULL
-        AND TRIM(CAST("Hyperlink" AS TEXT)) <> ''
+          AND "Hyperlink" IS NOT NULL
+          AND TRIM(CAST("Hyperlink" AS TEXT)) <> ''
         ORDER BY "ID"
         LIMIT :limit OFFSET :offset
         """
