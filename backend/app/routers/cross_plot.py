@@ -18,7 +18,6 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/crossplots", tags=["Cross Plots"])
 
-
 @lru_cache
 def get_service() -> CrossPlotService:
     """Dependency to get a shared CrossPlotService instance (uses DB table)."""
