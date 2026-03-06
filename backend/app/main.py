@@ -62,7 +62,7 @@ async def root():
     return {
         "name": settings.app_name,
         "version": settings.app_version,
-        "description": "Geologic Data API for Bell Canyon Formation study",
+        "description": "Geologic Data API for Brushy Canyon Formation study",
         "endpoints": {
             "docs": "/docs",
             "api": settings.api_v1_prefix,
@@ -71,6 +71,22 @@ async def root():
         }
     }
 
+@app.get("/crossplot", tags=["Crossplot"])
+async def crossplot():
+    """
+    Crossplot endpoint - returns API information.
+    """
+    return {
+        "name": settings.app_name,
+        "version": settings.app_version,
+        "description": "Geologic Data API for Bell Canyon Formation study",
+        "endpoints": {
+            "docs": "/docs",
+            "api": settings.api_v1_prefix,
+            "tables": f"{settings.api_v1_prefix}/geologic/tables",
+            "crossplots": f"{settings.api_v1_prefix}/crossplots/{{section_name}}",
+        }
+    }
 
 @app.get("/health", tags=["Health"])
 async def health_check():
