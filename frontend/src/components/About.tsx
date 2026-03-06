@@ -2,10 +2,10 @@ import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import { useAuth } from '../contexts/AuthContext';
-import { Link as RouterLink } from "react-router-dom"; // React Router link
-import logo from "../assets/below_about.jpg";
+// import Button from '@mui/material/Button';
+// import { useAuth } from '../contexts/AuthContext';
+// import { Link as RouterLink } from "react-router-dom"; 
+import logo from "../assets/top_banner.jpg";
 
 const About = () => {
   return (

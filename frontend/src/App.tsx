@@ -3,7 +3,7 @@ import "./App.css";
 import Map from "./components/Map";
 import NavBar from "./components/NavBar";
 import Nav from "./components/Nav";
-import About from "./components/About";
+// import About from "./components/About";
 // import NavBar from "./components/Nav";
 import FeatureDetails from "./components/FeatureDetails";
 
