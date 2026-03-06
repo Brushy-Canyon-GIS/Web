@@ -6,6 +6,10 @@
   overflow: auto;
 }
 
+html, body {
+  overflow: auto;  
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -25,8 +29,6 @@ body {
   padding: 2rem;
   overflow-y: auto;
   background-color: #ffffff;
-  overflow: hidden;
-
 }
 
 .options-title {

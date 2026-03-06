@@ -5,16 +5,9 @@ import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import { useAuth } from '../contexts/AuthContext';
 import { Link as RouterLink } from "react-router-dom"; // React Router link
-import logo from "../assets/top_banner.jpg";
+import logo from "../assets/below_about.jpg";
 
-const Nav = () => {
-  const { user } = useAuth();
-  const roundedButtonStyle = {
-    borderRadius: "8px",
-    margin: "0 8px",
-    borderWidth: "2px"
-  };
-
+const About = () => {
   return (
     <AppBar
       position="fixed"
@@ -36,37 +29,12 @@ const Nav = () => {
               flexGrow: 1
             }}
           >
-            Outcrop Analog
+            About
           </Typography>
-
-          {user ? (
-            <>
-              {/* Sign Out button can go here */}
-            </>
-          ) : (
-            <>
-              <Button
-                color="inherit"
-                variant="outlined"
-                component={RouterLink}
-                to="/signin"
-                sx={roundedButtonStyle}
-              >
-                Sign In
-              </Button>
-              <Button
-                color="inherit"
-                component={RouterLink}
-                to="/signup"
-              >
-                Sign Up
-              </Button>
-            </>
-          )}
         </Toolbar>
       </Container>
     </AppBar>
   );
 };
 
-export default Nav;
+export default About;
