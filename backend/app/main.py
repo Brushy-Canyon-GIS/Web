@@ -67,6 +67,7 @@ async def root():
             "docs": "/docs",
             "api": settings.api_v1_prefix,
             "tables": f"{settings.api_v1_prefix}/geologic/tables"
+            "crossplots:" f"{settings.api_v1_prefix}/crossplots/{{section_name}}",
         }
     }
 

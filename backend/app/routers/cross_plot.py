@@ -25,7 +25,7 @@ def get_service() -> CrossPlotService:
 
 
 @router.get(
-    "api/v1/crossplots/{section_name}",
+    "/{section_name}",
     summary="Get cross plot for a measured section",
     description=(
         "Returns a PNG image of the cross plot for the specified measured "
