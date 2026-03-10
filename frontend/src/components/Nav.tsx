@@ -6,15 +6,22 @@ import Button from '@mui/material/Button';
 import { useAuth } from '../contexts/AuthContext';
 import { Link as RouterLink } from "react-router-dom"; // React Router link
 import logo from "../assets/top_banner.jpg";
+import { useNavigate } from 'react-router-dom';
 
 const Nav = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const roundedButtonStyle = {
     borderRadius: "8px",
     margin: "0 8px",
     borderWidth: "2px"
   };
 
+  const handleReset = () => {
+    navigate("/");       // navigate to home
+    window.scrollTo(0,0) // optional: scroll to top
+  };
+  
   return (
     <AppBar
       position="fixed"
@@ -30,10 +37,12 @@ const Nav = () => {
         <Toolbar disableGutters sx={{ minHeight: 100 }}>
           <Typography
             variant="h4"
+            onClick={handleReset}
             sx={{
               color: "white",
               fontWeight: "bold",
-              flexGrow: 1
+              flexGrow: 1,
+              cursor: "pointer",
             }}
           >
             Outcrop Analog
