@@ -167,6 +167,35 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
         }
       }
 
+      if (!map.current.hasImage("photo-panel-pin")) {
+        const size = 40;
+        const canvas = document.createElement("canvas");
+        canvas.width = size;
+        canvas.height = size;
+        const ctx = canvas.getContext("2d");
+
+        if (ctx) {
+          ctx.clearRect(0, 0, size, size);
+          ctx.beginPath();
+          ctx.arc(size / 2, 13, 9, 0, Math.PI * 2);
+          ctx.fillStyle = "#D1495B";
+          ctx.fill();
+          ctx.beginPath();
+          ctx.moveTo(size / 2, 30);
+          ctx.lineTo(size / 2 - 7, 17);
+          ctx.lineTo(size / 2 + 7, 17);
+          ctx.closePath();
+          ctx.fillStyle = "#D1495B";
+          ctx.fill();
+          ctx.beginPath();
+          ctx.arc(size / 2, 13, 3, 0, Math.PI * 2);
+          ctx.fillStyle = "#FFFFFF";
+          ctx.fill();
+          const imageData = ctx.getImageData(0, 0, size, size);
+          map.current.addImage("photo-panel-pin", imageData, { pixelRatio: 2 });
+        }
+      }
+
       const colorExpression: any = ["match", ["get", "CYCLE"]];
       
       Object.entries(colors).forEach(([cycle, color]) => {
@@ -384,6 +413,7 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
         });
 
       }
+
       const lineMidpoints = buildLineMidpointFeatures(geojson);
       if (map.current.getSource("photo-panels-line-midpoints")) {
         (

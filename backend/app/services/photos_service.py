@@ -300,4 +300,4 @@ class PhotosService:
         
         result = await self.db.fetch_one(query, {"name": name})
 
-        return result
+        return result     
