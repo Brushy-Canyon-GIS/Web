@@ -6,6 +6,7 @@ import Nav from "./components/Nav";
 // import About from "./components/About";
 // import NavBar from "./components/Nav";
 import FeatureDetails from "./components/FeatureDetails";
+import About from "./components/About";
 
 type Layer =
   | "atlas_maps"
@@ -110,6 +111,9 @@ function App() {
               showPhotoPanels={selectedLayers.includes("photo_panels")}
             />
           </div>
+        </div>
+        <div>
+          <About />
         </div>
         
       </>

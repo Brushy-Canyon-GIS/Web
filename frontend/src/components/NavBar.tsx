@@ -25,13 +25,13 @@ interface NavBarProps {
 
 const NavBar: React.FC<NavBarProps> = ({ selectedLayers, handleLayerChange }) => {
   const layers = [
-    { key: "atlas_maps", label: "Atlas Map" },
-    { key: "fan_geology", label: "Fan Geology" },
+    // { key: "atlas_maps", label: "Atlas Map" },
+    { key: "fan_geology", label: "Geologic Map" },
+    { key: "measured_sections_all_areas", label: "Measured Sections" },
     { key: "photo_panels", label: "Photo Panels" },
     { key: "cross_sections", label: "Cross Sections" },
     { key: "faults", label: "Faults" },
-    { key: "measured_sections_all_areas", label: "Measured Sections (All Areas)" },
-    { key: "brushy_intersect_final2", label: "Brushy Intersect Final 2" },
+    // { key: "brushy_intersect_final2", label: "Brushy Intersect Final 2" },
     { key: "fan_delivery_system", label: "Fan Delivery System" },
     { key: "fieldtripstops", label: "Field Trip Stops" },
     { key: "ftrip_m", label: "Field Trip Markers" },
@@ -39,7 +39,7 @@ const NavBar: React.FC<NavBarProps> = ({ selectedLayers, handleLayerChange }) =>
     { key: "gis_region_small", label: "Small GIS Regions" },
     { key: "gradient_regions", label: "Gradient Regions" },
     { key: "patterns", label: "Patterns" },
-    { key: "cutoffmeasuredsections", label: "Cut Off Measured Sections" },
+    // { key: "cutoffmeasuredsections", label: "Cut Off Measured Sections" },
   ];
 
   return (

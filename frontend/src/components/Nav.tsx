@@ -21,7 +21,7 @@ const Nav = () => {
     navigate("/");       // navigate to home
     window.scrollTo(0,0) // optional: scroll to top
   };
-  
+
   return (
     <AppBar
       position="fixed"
