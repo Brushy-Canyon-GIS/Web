@@ -71,6 +71,7 @@ body {
 .map-container {
   width: 80%;
   padding: 5%;
+  padding-top: 80px; 
 }
 
 @keyframes logo-spin {

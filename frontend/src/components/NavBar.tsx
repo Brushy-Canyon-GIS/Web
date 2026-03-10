@@ -44,7 +44,9 @@ const NavBar: React.FC<NavBarProps> = ({ selectedLayers, handleLayerChange }) =>
 
   return (
     <div className="options-panel">
-      <h3 className="options-title">Map Layers for Brushy Canyon</h3>
+      <br></br>
+      <h3 className="options-title">Map Layers</h3>
+      <h5 className="options-text">Select one or more layers and then click the line or polygon (or its name) to display attributes of that dataset. For example, Measured Sections have pop-up plots of facies, grain size, and bed thickness data. </h5>
       <div className="options-list">
         {layers.map(({ key, label }) => (
           <label key={key} className="layer-option">

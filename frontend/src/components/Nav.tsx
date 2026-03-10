@@ -30,7 +30,8 @@ const Nav = () => {
         backgroundSize: "cover",
         backgroundPosition: "center",
         height: 100,
-        justifyContent: "center" // vertically centers the content
+        justifyContent: "center", 
+        fontFamily: "Verdana, Helvetica, sans-serif"
       }}
     >
       <Container maxWidth="xl">
@@ -45,7 +46,7 @@ const Nav = () => {
               cursor: "pointer",
             }}
           >
-            Outcrop Analog
+            Outcrop Analog: Brushy Canyon Formation
           </Typography>
 
           {user ? (

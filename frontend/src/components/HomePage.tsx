@@ -1,6 +1,6 @@
 const HomePage = () => {
   return <>
-            <h1>Outcrop Analog</h1> 
+            <h1>Outcrop Analog: Brushy Canyon Formation</h1> 
         </>;
 };
 
