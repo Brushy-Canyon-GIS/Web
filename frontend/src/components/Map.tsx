@@ -181,11 +181,24 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
         ) as mapboxgl.GeoJSONSource;
         source.setData(geojson);
       } else {
+
+        // make the fault lines firebrick
+        if (map.current.getSource("faults")) {
+          map.current.addLayer({
+            id: "fault-line",
+            type: "line",
+            source: "faults",
+            paint: {
+              "fill-color": "firebrick",
+              "line-width": 4,
+            },
+          });
+        }
+
         map.current.addSource("geojson-data", {
           type: "geojson",
           data: geojson,
         });
-
 
         map.current.addLayer({
           id: "geojson-fill",
@@ -198,14 +211,14 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
           },
         });
 
-
+        //geojson lines
         map.current.addLayer({
           id: "geojson-line",
           type: "line",
           source: "geojson-data",
           paint: {
             "line-color": colorExpression,
-            "line-width": 2,
+            "line-width": 4,
           },
         });
 
@@ -382,7 +395,6 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
             }
           });
         });
-
       }
       const lineMidpoints = buildLineMidpointFeatures(geojson);
       if (map.current.getSource("photo-panels-line-midpoints")) {
