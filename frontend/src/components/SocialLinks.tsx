@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+// import Typography from '@mui/material/Typography';
 import minesLogo from "../assets/mines.png";
 import githubLogo from "../assets/github.png";
 import linkedinLogo from "../assets/linkedin.png";
