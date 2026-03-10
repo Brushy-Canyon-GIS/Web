@@ -61,7 +61,7 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
       </button>
 
       <div className="details-content">
-        <h3 style={{ marginTop: 0, marginBottom: "16px" }}>Feature Details</h3>
+        <h4 style={{ marginTop: 0, marginBottom: "16px" }}>Feature Details</h4>
 
         <div className="detail-item" style={{ marginBottom: "12px" }}>
           <strong>Name:</strong>
@@ -114,7 +114,7 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
                 width: "100%",
               }}
             >
-              Show cross plot again
+              Cross Plot
             </button>
           </div>
         )}
