@@ -40,13 +40,13 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
 
   return (
     <div className="feature-details">
-      <br></br>
+      
       <button
         onClick={onBack}
         className="back-button"
         style={{
-          padding: "8px 16px",
-          // marginTop: "60px",
+          // padding: "8px 16px",
+          marginTop: "60px",
           marginBottom: "16px",
           cursor: "pointer",
           border: "1px solid #ccc",
