@@ -134,7 +134,12 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
   }, []);
 
   useEffect(() => {
-    if (!map.current || !geojson) return;
+    if (!map.current) return;
+
+    const data = geojson ?? {
+      type: "FeatureCollection",
+      features: [],
+    };
 
     const addOrUpdateSource = () => {
       if (!map.current) return;
@@ -179,25 +184,12 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
         const source = map.current.getSource(
           "geojson-data"
         ) as mapboxgl.GeoJSONSource;
-        source.setData(geojson);
+        source.setData(data);
       } else {
-
-        // make the fault lines firebrick
-        if (map.current.getSource("faults")) {
-          map.current.addLayer({
-            id: "fault-line",
-            type: "line",
-            source: "faults",
-            paint: {
-              "fill-color": "firebrick",
-              "line-width": 4,
-            },
-          });
-        }
 
         map.current.addSource("geojson-data", {
           type: "geojson",
-          data: geojson,
+          data: data,
         });
 
         map.current.addLayer({
@@ -218,7 +210,7 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
           source: "geojson-data",
           paint: {
             "line-color": colorExpression,
-            "line-width": 4,
+            "line-width": 3,
           },
         });
 
@@ -232,6 +224,12 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
             "text-field": ["get", "CYCLE"],
             "text-size": 12,
           },
+          paint: {
+            "text-color": "#ffffff",
+            "text-halo-color": "#000000",
+            "text-halo-width": 2,
+            "text-halo-blur": 1
+        }
         });
 
         // feature labeling by Name
@@ -244,6 +242,12 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
             "text-field": ["get", "Name"],
             "text-size": 12,
           },
+          paint: {
+            "text-color": "#ffffff",
+            "text-halo-color": "#000000",
+            "text-halo-width": 2,
+            "text-halo-blur": 1
+          } 
         });
 
         // feature labeling by NAME
@@ -256,6 +260,12 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
             "text-field": ["get", "NAME"],
             "text-size": 12,
           },
+          paint: {
+            "text-color": "#ffffff",
+            "text-halo-color": "#000000",
+            "text-halo-width": 2,
+            "text-halo-blur": 1
+        }
         });
 
         map.current.addLayer({
@@ -396,7 +406,7 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
           });
         });
       }
-      const lineMidpoints = buildLineMidpointFeatures(geojson);
+      const lineMidpoints = buildLineMidpointFeatures(data);
       if (map.current.getSource("photo-panels-line-midpoints")) {
         (
           map.current.getSource("photo-panels-line-midpoints") as mapboxgl.GeoJSONSource

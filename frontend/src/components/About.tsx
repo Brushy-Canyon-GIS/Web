@@ -56,6 +56,7 @@ const About = () => {
           </Typography>
           <Typography
             variant="body1"
+            component="div"
             sx={{ color: "white", marginTop: 10 }}
           >
             This dataset forms the basis of a joint industry project (JIP) focused on outcrop-to-subsurface characterization of the Delaware Mountain Group with applications for: <br />
@@ -75,7 +76,7 @@ const About = () => {
               rel="noopener noreferrer" // security best practice
               style={{ color: "#4fc3f7", textDecoration: "underline" }} // optional styling
             >
-              VRG Geoscience
+              VR Geoscience
             </a>
             <br />
             <SocialLinks />

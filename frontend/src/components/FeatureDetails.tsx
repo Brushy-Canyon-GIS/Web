@@ -45,19 +45,21 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
         onClick={onBack}
         className="back-button"
         style={{
-          padding: "10px 20px",
           marginTop: "60px",
           marginBottom: "16px",
-          cursor: "pointer",
-          border: "1px solid #ccc",
-          borderRadius: "4px",
           background: "white",
           display: "flex",
           alignItems: "center",
           gap: "8px",
+          padding: "10px 16px",
+          cursor: "pointer",
+          border: "1px solid #666",
+          borderRadius: "6px",
+          fontWeight: 500,
+          width: "100%",
         }}
       >
-        ← Back
+        Back
       </button>
 
       <div className="details-content">

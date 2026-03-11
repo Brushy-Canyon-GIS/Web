@@ -3,10 +3,10 @@ import "./App.css";
 import Map from "./components/Map";
 import NavBar from "./components/NavBar";
 import Nav from "./components/Nav";
-// import About from "./components/About";
-// import NavBar from "./components/Nav";
 import FeatureDetails from "./components/FeatureDetails";
 import About from "./components/About";
+
+const API_BASE = `${import.meta.env.VITE_API_URL ?? "http://localhost:8000"}`;
 
 type Layer =
   | "atlas_maps"
@@ -54,7 +54,7 @@ function App() {
       for (const layer of selectedLayers) {
         try {
           const res = await fetch(
-            `${import.meta.env.VITE_API_URL}/api/v1/geologic/${layer}`
+            `${API_BASE}/api/v1/geologic/${layer}`
           );
           const data = await res.json();
           data.features = (data.features || []).map((feature: any) => ({
