@@ -19,27 +19,46 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
   const crossPlotUrl = displayName
     ? `${API_BASE}/crossplots/${encodeURIComponent(displayName)}`
     : null;
+
+  
+    // --- Cross Plot States ---
   const [crossPlotError, setCrossPlotError] = useState(false);
   const [crossPlotLoaded, setCrossPlotLoaded] = useState(false);
   const [crossPlotModalOpen, setCrossPlotModalOpen] = useState(false);
 
-  const handleCrossPlotError = useCallback(() => {
-    setCrossPlotError(true);
-  }, []);
+  // --- Photo States ---
+  const [photoError, setPhotoError] = useState(false);
+  const [photoLoaded, setPhotoLoaded] = useState(false);
+  const [photoModalOpen, setPhotoModalOpen] = useState(false);
 
+  // --- Callbacks ---
+  const handleCrossPlotError = useCallback(() => setCrossPlotError(true), []);
   const handleCrossPlotLoad = useCallback(() => {
     setCrossPlotLoaded(true);
     setCrossPlotModalOpen(true);
+  }, []);
+
+  const handlePhotoError = useCallback(() => setPhotoError(true), []);
+  const handlePhotoLoad = useCallback(() => {
+    setPhotoLoaded(true);
+    setPhotoModalOpen(true);
   }, []);
 
   useEffect(() => {
     setCrossPlotError(false);
     setCrossPlotLoaded(false);
     setCrossPlotModalOpen(false);
-  }, [displayName]);
+
+    setPhotoError(false);
+    setPhotoLoaded(false);
+    setPhotoModalOpen(false);
+  }, [displayName, photoUrl]);
 
   return (
-    <div className="feature-details">
+      <div
+        className="feature-details"
+        style={{ minWidth: "150px" }}
+      >
       
       <button
         onClick={onBack}
@@ -47,6 +66,7 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
         style={{
           marginTop: "60px",
           marginBottom: "16px",
+          minWidth: "100px",
           background: "white",
           display: "flex",
           alignItems: "center",
@@ -56,14 +76,13 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
           border: "1px solid #666",
           borderRadius: "6px",
           fontWeight: 500,
-          width: "100%",
         }}
       >
         Back
       </button>
 
-      <div className="details-content">
-        <h4 style={{ marginTop: 0, marginBottom: "16px" }}>Feature Details</h4>
+      <div className="details-content"> 
+        <h4 style={{ marginTop: 0, marginBottom: "16px"}}>Feature Details</h4>
 
         <div className="detail-item" style={{ marginBottom: "12px" }}>
           <strong>Name:</strong>
@@ -95,11 +114,11 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
           </>
         )}
 
-        {crossPlotUrl && crossPlotError && (
+        {/* {crossPlotUrl && crossPlotError && (
           <p style={{ color: "#666", marginTop: 8, marginBottom: 16 }}>
             Cross plot unavailable for this section.
           </p>
-        )}
+        )} */}
 
         {crossPlotLoaded && crossPlotUrl && !crossPlotError && (
           <div style={{ marginBottom: "20px" }}>
@@ -113,7 +132,6 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
                 borderRadius: "6px",
                 background: "#f5f5f5",
                 fontWeight: 500,
-                width: "100%",
               }}
             >
               Cross Plot
@@ -147,7 +165,7 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
                 maxHeight: "95vh",
                 background: "white",
                 borderRadius: "12px",
-                boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+                boxShadow: "0 8px 32px rgba(185, 184, 184, 0.4)",
                 overflow: "auto",
               }}
             >
@@ -176,7 +194,7 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
                     padding: 0,
                     border: "none",
                     borderRadius: "4px",
-                    background: "#eee",
+                    background: "#afa0a0",
                     cursor: "pointer",
                     fontSize: "18px",
                     lineHeight: 1,
@@ -200,37 +218,75 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
           </div>
         )}
 
-        {photoUrl && (
-         <strong
-              style={{ display: "block", marginBottom: "8px", color: "#666" }}
-            >
-              Hyperlink Image:
-            </strong>
-          )}
+                {/* --- Photo Preload & Modal --- */}
+        {photoUrl && !photoError && (
+          <img
+            src={photoUrl}
+            alt=""
+            aria-hidden
+            style={{ display: "none" }}
+            onLoad={handlePhotoLoad}
+            onError={handlePhotoError}
+          />
+        )}
 
-        {photoUrl && (
-          <div style={{ marginBottom: "20px" }}>
-            <a href={photoUrl} target="_blank">
-            <img
-              src={photoUrl}
-              alt="Hyperlink"
+        {photoLoaded && photoUrl && !photoError && (
+          <button
+            onClick={() => setPhotoModalOpen(true)}
+            style={{
+              padding: "10px 16px",
+              cursor: "pointer",
+              border: "1px solid #666",
+              borderRadius: "6px",
+              background: "#f5f5f5",
+              fontWeight: 500,
+              marginTop: "12px",
+            }}
+          >
+            Photo
+          </button>
+        )}
+
+        {photoModalOpen && photoUrl && (
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Photo"
+            onClick={() => setPhotoModalOpen(false)}
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 9999,
+              background: "rgba(122, 116, 116, 0.75)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              padding: "24px",
+              boxSizing: "border-box",
+            }}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
               style={{
-                width: "100%",
-                height: "auto",
-                maxHeight: "none", 
-                borderRadius: "8px",
-                boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-                display: "block",
-                objectFit: "contain", 
+                position: "relative",
+                maxWidth: "95vw",
+                maxHeight: "95vh",
+                background: "white",
+                borderRadius: "12px",
+                boxShadow: "0 8px 32px rgba(111, 109, 109, 0.4)",
+                overflow: "auto",
               }}
-              onError={(e) => {
-                const parent = (e.target as HTMLImageElement).parentElement;
-                if (parent) {
-                  parent.innerHTML = `<a href="${photoUrl}" target="_blank" rel="noopener noreferrer" style="color: #0066cc; word-break: break-all;">View Link →</a>`;
-                }
-              }}
-            />
-            </a>
+            >
+              <div style={{ padding: "16px 48px 8px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #333" }}>
+                <strong>Photo — {displayName}</strong>
+                <button onClick={() => setPhotoModalOpen(false)}>×</button>
+              </div>
+              <img
+                src={photoUrl}
+                alt={`Photo for ${displayName}`}
+                style={{ display: "block", width: "100%", maxWidth: "900px", height: "auto", padding: "16px" }}
+              />
+            </div>
           </div>
         )}
       </div>

@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"; // react hooks
 import "./App.css"; // styling
-import Map from "./components/Map";
+import Map from "./components/Map.tsx";
 import NavBar from "./components/NavBar";
 import Nav from "./components/Nav";
 import FeatureDetails from "./components/FeatureDetails";
 import About from "./components/About";
+import CROSS_PLOT_SECTIONS from "./constants/crossPlotSections.ts";
+import PHOTO_PANELS from "./constants/photoPanels.ts";
 
 // base URL for backend API
 const API_BASE = `${import.meta.env.VITE_API_URL ?? "http://localhost:8000"}`;
@@ -26,6 +28,13 @@ type Layer =
   | "gradient_regions"
   | "patterns"
   | "cutoffmeasuredsections";
+
+const normalize = (str: string) =>
+  str
+    .toLowerCase()
+    .replace(/\s+/g, "")      // remove spaces
+    .replace(/[_\-]/g, "")    // remove underscores/dashes
+    .trim();
 
 // root component of the application
 function App() {
@@ -62,21 +71,39 @@ function App() {
       // create array to store GeoJSON results from each layer
       const layerData: GeoJSON.FeatureCollection[] = [];
 
-      // loop through layers
       for (const layer of selectedLayers) {
         try {
-          //calls the backend API
-          const res = await fetch(
-            `${API_BASE}/api/v1/geologic/${layer}`
-          );
-          const data = await res.json(); // converts response to JSON
+          const res = await fetch(`${API_BASE}/api/v1/geologic/${layer}`);
+          const data = await res.json();
 
-          // loops through features and modifies them
+          // Add __layer and hasCrossPlot
           data.features = (data.features || []).map((feature: any) => ({
-            ...feature, // copy original feature
+            ...feature,
             properties: {
-              ...(feature.properties || {}), // copy existing props
-              __layer: layer, // add a custom property
+              ...(feature.properties || {}),
+              __layer: layer,
+              hasCrossPlot:
+                layer === "measured_sections_all_areas"
+                  ? CROSS_PLOT_SECTIONS.some(
+                      s =>
+                        normalize(s) ===
+                        normalize(
+                          feature.properties?.NAME ??
+                          feature.properties?.Name ??
+                          ""
+                        )
+                    )
+                  : false,
+               hasPhoto:
+                layer === "photo_panels"
+                  ? PHOTO_PANELS.some(
+                      s =>
+                        normalize(s) ===
+                        normalize(
+                          feature.properties?.NAME ?? feature.properties?.Name ?? ""
+                        )
+                    )
+                  : false,
             },
           }));
           console.log({ data }); // prints API response to browser console
@@ -125,10 +152,16 @@ function App() {
               geojson={geojson} // pass geoJSON data
               onFeatureClick={setSelectedFeature} // When user clicks feature, set it
               showPhotoPanels={selectedLayers.includes("photo_panels")}
+              showCrossPlots={selectedLayers.includes("measured_sections_all_areas")}
             />
           </div>
         </div>
-        <div>
+        <div
+          id="about-section"
+          style={{
+            scrollMarginTop: "110px", // prevents header overlap
+          }}
+        >
           <About />
         </div>
       </>

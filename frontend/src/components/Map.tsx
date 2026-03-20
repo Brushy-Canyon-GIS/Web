@@ -3,22 +3,41 @@ import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import fanGeologyColors from "../fanGeology.json";
 
+/** 
+ * This component renders an interactive map using Mapbox GL. It receives geoJSON
+ * data and visualizes it as map layers. 
+ */ 
+
 mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_TOKEN;
 
+/**This interfavce receives a GeoJSON dataset that represents map features. It also
+ * optionally receives a flag to toggle photo panels and a callback for when a user clicks 
+ * a feature. The callback keeps the component reusable because it doesn't assume how the
+ * parent hands feature selection.
+ */
 interface MapProps {
   geojson: GeoJSON.FeatureCollection | null;
   showPhotoPanels?: boolean;
+  showCrossPlots?: boolean;    // new cross plot variable
   onFeatureClick?: (data: { 
     properties: Record<string, any>; 
     photoUrl: string | null;
   }) => void;
 }
 
+/**
+ * This helper checks whether a feature actually has a valid hyperlink property before
+ * treating it as a photo panel.
+ */
 const hasNonEmptyHyperlink = (properties: Record<string, any> | null | undefined) => {
   const value = properties?.Hyperlink;
   return value !== null && value !== undefined && String(value).trim() !== "";
 };
 
+/**
+ * This calculates the midpoint of a line feature by measuring segment lengths and interpolating
+ * the halfway point. This ensures the midpoint is geometrically correct.
+ */
 const lineMidpoint = (coordinates: number[][]): [number, number] | null => {
   if (!coordinates || coordinates.length === 0) return null;
   if (coordinates.length === 1) return [coordinates[0][0], coordinates[0][1]];
@@ -26,7 +45,7 @@ const lineMidpoint = (coordinates: number[][]): [number, number] | null => {
   let total = 0;
   const segments: Array<{ start: number[]; end: number[]; len: number }> = [];
 
-  for (let i = 1; i < coordinates.length; i += 1) {
+  for (let i = 1; i < coordinates.length; i++) {
     const start = coordinates[i - 1];
     const end = coordinates[i];
     const dx = end[0] - start[0];
@@ -58,14 +77,24 @@ const lineMidpoint = (coordinates: number[][]): [number, number] | null => {
   return [last[0], last[1]];
 };
 
-const buildLineMidpointFeatures = (
-  collection: GeoJSON.FeatureCollection
-): GeoJSON.FeatureCollection => {
+/**
+ * This converts line-based photo panel features into point features at their midpoints
+ * so they can be rendered with markers. This ultimately adapts the data to a format better
+ * for visualization.
+ */
+const buildLineMidpointFeatures = ( collection: GeoJSON.FeatureCollection, layerType: "photo_panels"): 
+  GeoJSON.FeatureCollection => {
   const features: GeoJSON.Feature[] = [];
-
+    
   for (const feature of collection.features || []) {
     const props = (feature.properties || {}) as Record<string, any>;
-    if (props.__layer !== "photo_panels" || !hasNonEmptyHyperlink(props)) continue;
+
+    if (props.__layer !== layerType) continue;
+
+    if (
+      props.__layer === "photo_panels" &&
+      !hasNonEmptyHyperlink(props)
+    ) continue;
 
     const geometry = feature.geometry;
     if (!geometry) continue;
@@ -73,6 +102,7 @@ const buildLineMidpointFeatures = (
     if (geometry.type === "LineString") {
       const midpoint = lineMidpoint(geometry.coordinates as number[][]);
       if (midpoint) {
+        console.log("Cross plot midpoint:", midpoint, "props:", props);
         features.push({
           type: "Feature",
           properties: { ...props },
@@ -99,14 +129,23 @@ const buildLineMidpointFeatures = (
   return { type: "FeatureCollection", features };
 };
 
-const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) => {
+
+
+/**
+ * Refs were used here instead of state because the Mapbox map object is mutable and 
+ * should not trigger React re-renders. Refs allow the map instance to persist across renders.
+ */
+const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, showCrossPlots, onFeatureClick }) => {
   const mapContainer = useRef<HTMLDivElement | null>(null);
   const map = useRef<mapboxgl.Map | null>(null);
   const mapLoaded = useRef(false);
-
+  // const crossPlotMarkersRef = useRef<mapboxgl.Marker[]>([]);
   const colors =  fanGeologyColors;
 
-
+  /**
+   * This effect runs once and initializes the Mapbox map. The map is configured 
+   * with a satellite basemap, a center location, and a zoom level.
+   */
   useEffect(() => {
     if (map.current) return;
 
@@ -124,7 +163,10 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
       mapLoaded.current = true;
     });
 
-
+    /**
+     * This ensures the map instance is properly destroyed when the component unmounts to avoid 
+     * memory leaks. 
+     */
     return () => {
       map.current?.remove();
       map.current = null;
@@ -132,6 +174,9 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
     };
   }, []);
 
+  /**
+   * Whenever the GeoJSON data or UI settings change, the map udpates its source and layers.
+   */
   useEffect(() => {
     if (!map.current) return;
 
@@ -140,9 +185,10 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
       features: [],
     };
 
-    const addOrUpdateSource = () => {
+    // adds photo panel pin for features with corresponding photo
+    const addOrUpdatePhotoPin = () => {
       if (!map.current) return;
-      if (!map.current.hasImage("photo-panel-pin")) {
+      if (!map.current.hasImage("photo-panel-pin"))  {
         const size = 40;
         const canvas = document.createElement("canvas");
         canvas.width = size;
@@ -170,7 +216,11 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
           map.current.addImage("photo-panel-pin", imageData, { pixelRatio: 2 });
         }
       }
-
+      /**
+       * This mapbox expression dynamically assigns colors based on the features
+       * geological cycle property. This allows styling directly in the map
+       * rendering pipeline rather than preprocessing the data. 
+       */
       const colorExpression: any = ["match", ["get", "CYCLE"]];
       
       Object.entries(colors).forEach(([cycle, color]) => {
@@ -179,6 +229,10 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
       
       colorExpression.push("#CCCCCC");
 
+      /**
+       * If the source already exists we update it, otherwise we create it, which prevents
+       * re-creating the map layers every render.
+       */
       if (map.current.getSource("geojson-data")) {
         const source = map.current.getSource(
           "geojson-data"
@@ -228,7 +282,7 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
             "text-halo-color": "#000000",
             "text-halo-width": 2,
             "text-halo-blur": 1
-        }
+          }
         });
 
         // feature labeling by Name
@@ -285,6 +339,8 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
           ["!=", ["coalesce", ["to-string", ["get", "Hyperlink"]], ""], ""],
         ];
 
+
+        //duplicate for cross plot
         map.current.addLayer({
           id: "photo-panels-fill",
           type: "fill",
@@ -299,6 +355,7 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
           },
         });
 
+        //duplicate for cross plot
         map.current.addLayer({
           id: "photo-panels-line",
           type: "line",
@@ -313,6 +370,7 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
           },
         });
 
+        //duplicate for cross plot
         map.current.addLayer({
           id: "photo-panels-circle",
           type: "circle",
@@ -328,6 +386,7 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
           },
         });
 
+        //duplicate for cross plot
         map.current.addLayer({
           id: "photo-panels-pin",
           type: "symbol",
@@ -340,6 +399,7 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
             "icon-allow-overlap": true,
           },
         });
+
 
         const layerIds = [
           "geojson-fill",
@@ -354,9 +414,18 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
           "photo-panels-pin",
         ];
 
-          layerIds.forEach((layerId) => {
+          
 
-          map.current!.on("click", layerId, async (e) => {
+          /**
+           * When a user clicks a feature we extract its properties and optionally 
+           * fetch the associated photo from the backend. The backend is returns 
+           * a temp URL for the photo which is then passed to the parent component
+           * through the callback.
+           */
+        layerIds.forEach((layerId) => {
+          if (!map.current?.getLayer(layerId)) return;
+
+          map.current.on("click", layerId, async (e) => {
             if (e?.features?.[0]?.properties && onFeatureClick) {
               const properties = e.features[0].properties;
               
@@ -391,7 +460,10 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
             }
           });
 
-
+          /**
+           * This changes mouse from cursor to pointer on geological features
+           * to let the user know the features are interactive.
+           */
           map.current!.on("mouseenter", layerId, () => {
             if (map.current) {
               map.current.getCanvas().style.cursor = "pointer";
@@ -405,15 +477,17 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
           });
         });
       }
-      const lineMidpoints = buildLineMidpointFeatures(data);
+      
+      const photoPanelMidpoints = buildLineMidpointFeatures(data, "photo_panels");
+
       if (map.current.getSource("photo-panels-line-midpoints")) {
         (
           map.current.getSource("photo-panels-line-midpoints") as mapboxgl.GeoJSONSource
-        ).setData(lineMidpoints);
+        ).setData(photoPanelMidpoints);
       } else {
         map.current.addSource("photo-panels-line-midpoints", {
           type: "geojson",
-          data: lineMidpoints,
+          data: photoPanelMidpoints,
         });
 
         map.current.addLayer({
@@ -489,15 +563,189 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, onFeatureClick }) =
           );
         }
       });
+
+      const crossPlotLayerIds = [
+        "cross-plots-fill",
+        "cross-plots-line",
+        "cross-plots-pin",
+        "cross-plots-multiline",
+      ];
+
+      crossPlotLayerIds.forEach((id) => {
+        if (map.current?.getLayer(id)) {
+          map.current.setLayoutProperty(
+            id,
+            "visibility",
+            showCrossPlots ? "visible" : "none"
+          );
+        }
+      });
     };
 
     if (mapLoaded.current) {
-      addOrUpdateSource();
+      addOrUpdatePhotoPin();
     } else {
-      map.current.on("load", addOrUpdateSource);
+      map.current.on("load", addOrUpdatePhotoPin);
     }
   }, [geojson, showPhotoPanels, colors]);
 
+  /**
+   * This is for crossplots
+   */
+  useEffect(() => {
+    const mapInstance = map.current;
+    if (!mapInstance || !geojson) return;
+
+    // Build crossplot point features
+    const crossPlotPoints: GeoJSON.FeatureCollection = {
+      type: "FeatureCollection",
+      features: geojson.features
+        .map((feature: any) => {
+          const props = feature.properties;
+          const layer = props?.__layer;
+          const displayName = props?.NAME ?? props?.Name ?? props?.name;
+
+          if (
+            layer !== "measured_sections_all_areas" ||
+            !displayName ||
+            !props?.hasCrossPlot
+          ) return null;
+
+          const geometry = feature.geometry;
+          let coords: [number, number] | null = null;
+          if (!geometry) return null;
+
+          if (geometry.type === "Point") coords = geometry.coordinates;
+          else if (geometry.type === "LineString")
+            coords = lineMidpoint(geometry.coordinates);
+          else if (geometry.type === "MultiLineString" && geometry.coordinates.length > 0)
+            coords = lineMidpoint(geometry.coordinates[0]);
+
+          if (!coords) return null;
+
+          return {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: coords,
+            },
+            properties: props,
+          };
+        })
+        .filter(Boolean) as GeoJSON.Feature[],
+    };
+
+    // Add or update source
+    if (mapInstance.getSource("crossplot-points")) {
+      (mapInstance.getSource("crossplot-points") as mapboxgl.GeoJSONSource)
+        .setData(crossPlotPoints);
+    } else {
+      mapInstance.addSource("crossplot-points", {
+        type: "geojson",
+        data: crossPlotPoints,
+      });
+
+      // Add layer (pins)
+      mapInstance.addLayer({
+        id: "crossplot-pins",
+        type: "symbol",
+        source: "crossplot-points",
+        layout: {
+          "icon-image": "photo-panel-pin", // reuse your existing pin
+          "icon-size": 0.8,
+          "icon-allow-overlap": true,
+        },
+      });
+    }
+
+    // Toggle visibility
+    if (mapInstance.getLayer("crossplot-pins")) {
+      mapInstance.setLayoutProperty(
+        "crossplot-pins",
+        "visibility",
+        showCrossPlots ? "visible" : "none"
+      );
+    }
+
+}, [geojson, showCrossPlots]);
+
+  useEffect(() => {
+    const mapInstance = map.current;
+    if (!mapInstance || !geojson) return;
+
+    // Build photo point features
+    const photoPoints: GeoJSON.FeatureCollection = {
+      type: "FeatureCollection",
+      features: geojson.features
+        .map((feature: any) => {
+          const props = feature.properties;
+          const layer = props?.__layer;
+          const displayName = props?.NAME ?? props?.Name ?? props?.name;
+          const photoUrl = props?.photoUrl;
+          const hasPhoto = props?.hasPhoto; // <-- check this property
+
+          // Only features that are photo layer, have displayName, URL, and hasPhoto
+          if (!layer || !displayName || !photoUrl || !hasPhoto) return null;
+
+          const geometry = feature.geometry;
+          let coords: [number, number] | null = null;
+          if (!geometry) return null;
+
+          if (geometry.type === "Point") coords = geometry.coordinates;
+          else if (geometry.type === "LineString")
+            coords = lineMidpoint(geometry.coordinates);
+          else if (geometry.type === "MultiLineString" && geometry.coordinates.length > 0)
+            coords = lineMidpoint(geometry.coordinates[0]);
+
+          if (!coords) return null;
+
+          return {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: coords,
+            },
+            properties: props,
+          };
+        })
+        .filter(Boolean) as GeoJSON.Feature[],
+    };
+
+    // Add or update source
+    if (mapInstance.getSource("photo-points")) {
+      (mapInstance.getSource("photo-points") as mapboxgl.GeoJSONSource).setData(photoPoints);
+    } else {
+      mapInstance.addSource("photo-points", {
+        type: "geojson",
+        data: photoPoints,
+      });
+
+      // Add layer (pins)
+      mapInstance.addLayer({
+        id: "photo-pins",
+        type: "symbol",
+        source: "photo-points",
+        layout: {
+          "icon-image": "photo-panel-pin", // your pin icon
+          "icon-size": 0.8,
+          "icon-allow-overlap": true,
+        },
+      });
+    }
+
+    // Toggle visibility
+    if (mapInstance.getLayer("photo-pins")) {
+      mapInstance.setLayoutProperty(
+        "photo-pins",
+        "visibility",
+        showPhotoPanels ? "visible" : "none"
+      );
+    }
+  }, [geojson, showPhotoPanels]);
+  /**
+   * The map itself renders inside this container div. The ref allows Mapbox to mount
+   * its WebGL canvas inside the element.
+   */
   return <div ref={mapContainer} style={{ width: "100%", height: "100%" }} />;
 };
 

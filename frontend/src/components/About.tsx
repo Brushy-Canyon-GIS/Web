@@ -10,6 +10,7 @@ import right_about from "../assets/right_about.jpg";
 import below_about from "../assets/below_about.jpg";
 import SocialLinks from './SocialLinks';
 
+
 const About = () => {
   return (
     <AppBar
@@ -22,10 +23,8 @@ const About = () => {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between", // pushes img to bottom
-        // padding: "1rem 0"
       }}
     >
-      {/* Lower Banner now at the top */}
       <img
         src={lower_banner}
         alt="About Banner"
@@ -84,7 +83,7 @@ const About = () => {
             Website created by: <br />
             Chris Giere, Katie Schneider Assaf, Varsha Sathiskumar
           </Typography>
-          {/* Image to the right*/}
+    
           <img
             src={right_about}
             alt="right about picture"
@@ -99,8 +98,6 @@ const About = () => {
         </Toolbar>
       </Container>
 
-      
-      {/* Lower banner image*/}
       <div style={{ 
           display: "flex", 
           justifyContent: "center", 

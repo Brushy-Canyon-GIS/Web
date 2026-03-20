@@ -7,6 +7,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { Link as RouterLink } from "react-router-dom"; // React Router link
 import logo from "../assets/top_banner.jpg";
 import { useNavigate } from 'react-router-dom';
+// import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import Tooltip from '@mui/material/Tooltip';
 
 const Nav = () => {
   const { user } = useAuth();
@@ -18,8 +20,18 @@ const Nav = () => {
   };
 
   const handleReset = () => {
-    navigate("/");       // navigate to home
-    window.scrollTo(0,0) // optional: scroll to top
+    if (window.location.pathname === "/") {
+      window.location.reload(); // force refresh if already home
+    } else {
+      navigate("/"); 
+    }
+  };
+
+  const handleAboutScroll = () => {
+    document.getElementById("about-section")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   };
 
   return (
@@ -48,6 +60,32 @@ const Nav = () => {
           >
             Outcrop Analog: Brushy Canyon Formation
           </Typography>
+          
+          <Tooltip title="About">
+            <Button
+              color="inherit"
+              variant="outlined"
+              onClick={handleAboutScroll}
+              sx={{
+                borderRadius: "8px",
+                margin: "0 8px",
+                fontWeight: 500,
+                fontSize: 30,
+                textTransform: "none",
+                backgroundColor: "rgba(255, 255, 255, 0.2)", // translucent background
+                borderColor: "white",                          // ensures outline is visible
+                color: "white",                                // text color
+                minWidth: "120px",
+                minHeight: "40px",
+                "&:hover": {
+                  backgroundColor: "rgba(255, 255, 255, 0.3)", // slightly stronger on hover
+                  borderColor: "white",
+                },
+              }}
+            >
+              About
+            </Button>
+          </Tooltip>
 
           {user ? (
             <>
