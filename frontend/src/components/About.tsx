@@ -19,7 +19,7 @@ const About = () => {
         top: "auto",
         bottom: 0,
         backgroundColor: "#464444", // dark background
-        height: 1200,
+        height: "auto",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between", // pushes img to bottom

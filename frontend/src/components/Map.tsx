@@ -262,8 +262,31 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, showCrossPlots, onF
           type: "line",
           source: "geojson-data",
           paint: {
-            "line-color": colorExpression,
-            "line-width": 3,
+            "line-color": [
+              "case",
+              ["==", ["get", "__layer"], "faults"],     // faults
+              "#B22222",                              // firebrick red for faults
+              colorExpression                         
+            ],
+            "line-width": [
+              "case",
+              ["==", ["get", "__layer"], "faults"],
+              2,  
+              3
+            ],
+          },
+        });
+
+        map.current.addLayer({
+          id: "geojson-circle",
+          type: "circle",
+          source: "geojson-data",
+          filter: ["==", ["geometry-type"], "Point"],
+          paint: {
+            "circle-radius": 6,
+            "circle-color": colorExpression,
+            "circle-stroke-width": 2,
+            "circle-stroke-color": "#FFFFFF",
           },
         });
 
@@ -318,29 +341,70 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, showCrossPlots, onF
             "text-halo-color": "#000000",
             "text-halo-width": 2,
             "text-halo-blur": 1
-        }
+          }
         });
 
+        // feature labeling by section arc for small gis region
         map.current.addLayer({
-          id: "geojson-circle",
-          type: "circle",
+          id: "section-arc",
+          type: "symbol",
           source: "geojson-data",
-          filter: ["==", ["geometry-type"], "Point"],
-          paint: {
-            "circle-radius": 6,
-            "circle-color": colorExpression,
-            "circle-stroke-width": 2,
-            "circle-stroke-color": "#FFFFFF",
+
+          layout: {
+            "text-field": ["get", "SectionArc"],
+            "text-size": 12,
           },
+          paint: {
+            "text-color": "#ffffff",
+            "text-halo-color": "#000000",
+            "text-halo-width": 2,
+            "text-halo-blur": 1
+          }
         });
+
+        // feature labeling by Gradient for Gradient Regions
+        map.current.addLayer({
+          id: "gradient-region",
+          type: "symbol",
+          source: "geojson-data",
+
+          layout: {
+            "text-field": ["get", "Gradient"],
+            "text-size": 12,
+          },
+          paint: {
+            "text-color": "#ffffff",
+            "text-halo-color": "#000000",
+            "text-halo-width": 2,
+            "text-halo-blur": 1
+          }
+        });
+
+        // feature labeling by Gradient for Gradient Regions
+        map.current.addLayer({
+          id: "pattern-names",
+          type: "symbol",
+          source: "geojson-data",
+
+          layout: {
+            "text-field": ["get", "DESCRIPT"],
+            "text-size": 12,
+          },
+          paint: {
+            "text-color": "#ffffff",
+            "text-halo-color": "#000000",
+            "text-halo-width": 2,
+            "text-halo-blur": 1
+          }
+        });
+
 
         const hasHyperlinkFilter: any[] = [
           ["==", ["get", "__layer"], "photo_panels"],
           ["!=", ["coalesce", ["to-string", ["get", "Hyperlink"]], ""], ""],
         ];
 
-
-        //duplicate for cross plot
+  
         map.current.addLayer({
           id: "photo-panels-fill",
           type: "fill",
@@ -355,7 +419,7 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, showCrossPlots, onF
           },
         });
 
-        //duplicate for cross plot
+
         map.current.addLayer({
           id: "photo-panels-line",
           type: "line",
@@ -370,7 +434,7 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, showCrossPlots, onF
           },
         });
 
-        //duplicate for cross plot
+
         map.current.addLayer({
           id: "photo-panels-circle",
           type: "circle",
@@ -386,7 +450,7 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, showCrossPlots, onF
           },
         });
 
-        //duplicate for cross plot
+
         map.current.addLayer({
           id: "photo-panels-pin",
           type: "symbol",
@@ -414,7 +478,6 @@ const Map: React.FC<MapProps> = ({ geojson, showPhotoPanels, showCrossPlots, onF
           "photo-panels-pin",
         ];
 
-          
 
           /**
            * When a user clicks a feature we extract its properties and optionally 

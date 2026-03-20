@@ -277,7 +277,7 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
                 overflow: "auto",
               }}
             >
-              <div style={{ padding: "16px 48px 8px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #333" }}>
+              <div style={{ padding: "16px 48px 8px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #989494" }}>
                 <strong>Photo — {displayName}</strong>
                 <button onClick={() => setPhotoModalOpen(false)}>×</button>
               </div>

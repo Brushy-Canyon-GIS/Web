@@ -40,14 +40,14 @@ app = FastAPI(
 )
 
 # CORS middleware
-# app.add_middleware(
-#     CORSMiddleware,
-#     # allow_origins=settings.cors_origins,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+app.add_middleware(
+    CORSMiddleware,
+    # allow_origins=settings.cors_origins,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Include routers
 app.include_router(geologic_router, prefix=settings.api_v1_prefix)
