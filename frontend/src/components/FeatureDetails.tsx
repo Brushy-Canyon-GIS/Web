@@ -279,7 +279,27 @@ const FeatureDetails: React.FC<FeatureDetailsProps> = ({
             >
               <div style={{ padding: "16px 48px 8px 16px", display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #989494" }}>
                 <strong>Photo — {displayName}</strong>
-                <button onClick={() => setPhotoModalOpen(false)}>×</button>
+                <button
+                  onClick={() => setPhotoModalOpen(false)}
+                  aria-label="Close"
+                  style={{
+                    position: "absolute",
+                    top: "12px",
+                    right: "12px",
+                    width: "32px",
+                    height: "32px",
+                    padding: 0,
+                    border: "none",
+                    borderRadius: "4px",
+                    background: "#afa0a0",   // same style as your other modal
+                    color: "#fff",           // 👈 makes the X visible
+                    cursor: "pointer",
+                    fontSize: "18px",
+                    lineHeight: 1,
+                  }}
+                >
+                  ×
+                </button>
               </div>
               <img
                 src={photoUrl}
