@@ -1,0 +1,35 @@
+$kind: http-request
+name: List All Tables
+method: GET
+url: '{{base_url}}{{api_prefix}}/geologic/tables'
+headers:
+  - key: X-API-Key
+    value: '{{api_key}}'
+order: 1000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has tables array and total number", function () {
+          var data = pm.response.json();
+          pm.expect(data).to.have.property("tables").that.is.an("array");
+          pm.expect(data).to.have.property("total").that.is.a("number");
+      });
+
+      pm.test("total is greater than 0", function () {
+          var data = pm.response.json();
+          pm.expect(data.total).to.be.above(0);
+      });
+
+      pm.test("Each table object has name, display_name, feature_count", function () {
+          var data = pm.response.json();
+          data.tables.forEach(function (table) {
+              pm.expect(table).to.have.property("name");
+              pm.expect(table).to.have.property("display_name");
+              pm.expect(table).to.have.property("feature_count");
+          });
+      });

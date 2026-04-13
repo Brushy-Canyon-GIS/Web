@@ -1,0 +1,24 @@
+$kind: http-request
+name: Get Photo URL by Name
+method: GET
+url: '{{base_url}}{{api_prefix}}/photos/photourl/:photo_name'
+headers:
+  - key: X-API-Key
+    value: '{{api_key}}'
+order: 5000
+pathVariables:
+  - key: photo_name
+    value: example_photo
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has photo_name and url", function () {
+          var data = pm.response.json();
+          pm.expect(data).to.have.property("photo_name");
+          pm.expect(data).to.have.property("url");
+      });

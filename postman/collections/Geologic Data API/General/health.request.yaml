@@ -1,0 +1,25 @@
+$kind: http-request
+name: Health Check
+method: GET
+url: '{{base_url}}/health'
+headers:
+  - key: X-API-Key
+    value: '{{api_key}}'
+order: 2000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has status and database fields", function () {
+          var data = pm.response.json();
+          pm.expect(data).to.have.property("status");
+          pm.expect(data).to.have.property("database");
+      });
+
+      pm.test("Response time is less than 2000ms", function () {
+          pm.expect(pm.response.responseTime).to.be.below(2000);
+      });

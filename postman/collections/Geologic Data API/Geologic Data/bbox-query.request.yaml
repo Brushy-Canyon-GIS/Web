@@ -1,0 +1,39 @@
+$kind: http-request
+name: BBox Query
+method: GET
+url: '{{base_url}}{{api_prefix}}/geologic/:table_name/bbox'
+headers:
+  - key: X-API-Key
+    value: '{{api_key}}'
+order: 5000
+pathVariables:
+  - key: table_name
+    value: atlas_maps
+queryParams:
+  - key: min_lng
+    value: '-105'
+  - key: min_lat
+    value: '31'
+  - key: max_lng
+    value: '-104'
+  - key: max_lat
+    value: '32'
+  - key: limit
+    value: '5'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response type is FeatureCollection", function () {
+          var data = pm.response.json();
+          pm.expect(data.type).to.eql("FeatureCollection");
+      });
+
+      pm.test("Response has features array", function () {
+          var data = pm.response.json();
+          pm.expect(data).to.have.property("features").that.is.an("array");
+      });

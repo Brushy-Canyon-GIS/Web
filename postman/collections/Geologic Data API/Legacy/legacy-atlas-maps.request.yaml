@@ -1,0 +1,25 @@
+$kind: http-request
+name: Legacy Atlas Maps
+method: GET
+url: '{{base_url}}/atlas_maps'
+headers:
+  - key: X-API-Key
+    value: '{{api_key}}'
+order: 1000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response type is FeatureCollection", function () {
+          var data = pm.response.json();
+          pm.expect(data.type).to.eql("FeatureCollection");
+      });
+
+      pm.test("Response has features array", function () {
+          var data = pm.response.json();
+          pm.expect(data).to.have.property("features").that.is.an("array");
+      });

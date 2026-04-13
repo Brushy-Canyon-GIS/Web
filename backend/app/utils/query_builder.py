@@ -100,23 +100,25 @@ def build_filter_conditions(
     if filters.bbox:
         try:
             coords = [float(x.strip()) for x in filters.bbox.split(',')]
-            if len(coords) == 4:
-                min_lng, min_lat, max_lng, max_lat = coords
-                # Use ST_Intersects with a bounding box (using actual geometry column)
-                conditions.append(f"""
-                    ST_Intersects(
-                        "{geometry_column}",
-                        ST_MakeEnvelope(:min_lng, :min_lat, :max_lng, :max_lat, 4326)
-                    )
-                """)
-                params.update({
-                    'min_lng': min_lng,
-                    'min_lat': min_lat,
-                    'max_lng': max_lng,
-                    'max_lat': max_lat
-                })
-        except (ValueError, AttributeError):
-            pass  # Invalid bbox format, skip
+            if len(coords) != 4:
+                raise ValueError("bbox must have exactly 4 comma-separated values")
+            min_lng, min_lat, max_lng, max_lat = coords
+            # Use ST_Intersects with a bounding box (using actual geometry column)
+            conditions.append(f"""
+                ST_Intersects(
+                    "{geometry_column}",
+                    ST_MakeEnvelope(:min_lng, :min_lat, :max_lng, :max_lat, 4326)
+                )
+            """)
+            params.update({
+                'min_lng': min_lng,
+                'min_lat': min_lat,
+                'max_lng': max_lng,
+                'max_lat': max_lat
+            })
+        except (ValueError, AttributeError) as e:
+            from fastapi import HTTPException
+            raise HTTPException(status_code=422, detail=f"Invalid bbox format: {str(e)}. Expected: min_lng,min_lat,max_lng,max_lat")
     
     # Name filter (case-insensitive partial match)
     if filters.name:

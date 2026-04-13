@@ -1,0 +1,15 @@
+$kind: http-request
+name: Param Manipulation - Negative offset
+method: GET
+url: '{{base_url}}{{api_prefix}}/geologic/atlas_maps'
+order: 6000
+queryParams:
+  - key: offset
+    value: '-5'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Negative offset should be rejected with 422", function () {
+          pm.expect(pm.response.code).to.equal(422);
+      });

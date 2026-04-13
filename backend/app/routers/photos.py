@@ -9,7 +9,9 @@ from app.models.photos import PhotoInfo, PhotoListResponse, PhotoDetailResponse
 from app.services.photos_service import PhotosService
 
 
-router = APIRouter(prefix="/photos", tags=["Photos"])
+from app.auth import require_api_key
+
+router = APIRouter(prefix="/photos", tags=["Photos"], dependencies=[Depends(require_api_key)])
 
 
 def get_service() -> PhotosService:

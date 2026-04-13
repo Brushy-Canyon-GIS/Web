@@ -1,0 +1,19 @@
+$kind: http-request
+name: Route Guess - users table
+method: GET
+url: '{{base_url}}{{api_prefix}}/geologic/users'
+order: 3000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Should not expose users table", function () {
+          pm.expect(pm.response.code).to.not.equal(200);
+      });
+
+      pm.test("Response should not contain user data fields", function () {
+          var body = pm.response.text();
+          pm.expect(body).to.not.include("password");
+          pm.expect(body).to.not.include("email");
+          pm.expect(body).to.not.include("user_id");
+      });

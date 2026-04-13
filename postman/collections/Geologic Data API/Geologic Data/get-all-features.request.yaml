@@ -1,0 +1,47 @@
+$kind: http-request
+name: Get All Features
+method: GET
+url: '{{base_url}}{{api_prefix}}/geologic/:table_name'
+headers:
+  - key: X-API-Key
+    value: '{{api_key}}'
+order: 3000
+pathVariables:
+  - key: table_name
+    value: atlas_maps
+queryParams:
+  - key: limit
+    value: '5'
+  - key: offset
+    value: '0'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response type is FeatureCollection", function () {
+          var data = pm.response.json();
+          pm.expect(data.type).to.eql("FeatureCollection");
+      });
+
+      pm.test("Response has features array", function () {
+          var data = pm.response.json();
+          pm.expect(data).to.have.property("features").that.is.an("array");
+      });
+
+      pm.test("features.length <= 5 (respects limit)", function () {
+          var data = pm.response.json();
+          pm.expect(data.features.length).to.be.at.most(5);
+      });
+
+      pm.test("Each feature has type, geometry, properties", function () {
+          var data = pm.response.json();
+          data.features.forEach(function (feature) {
+              pm.expect(feature.type).to.eql("Feature");
+              pm.expect(feature).to.have.property("geometry");
+              pm.expect(feature).to.have.property("properties");
+          });
+      });

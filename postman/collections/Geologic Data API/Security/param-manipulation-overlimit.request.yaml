@@ -1,0 +1,15 @@
+$kind: http-request
+name: Param Manipulation - Limit exceeds maximum
+method: GET
+url: '{{base_url}}{{api_prefix}}/geologic/atlas_maps'
+order: 8000
+queryParams:
+  - key: limit
+    value: '99999'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Limit exceeding max (1000) should be rejected with 422", function () {
+          pm.expect(pm.response.code).to.equal(422);
+      });

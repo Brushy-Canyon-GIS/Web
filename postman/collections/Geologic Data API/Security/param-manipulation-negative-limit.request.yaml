@@ -1,0 +1,22 @@
+$kind: http-request
+name: Param Manipulation - Negative limit
+method: GET
+url: '{{base_url}}{{api_prefix}}/geologic/atlas_maps'
+order: 5000
+queryParams:
+  - key: limit
+    value: '-1'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Negative limit should be rejected with 422", function () {
+          pm.expect(pm.response.code).to.equal(422);
+      });
+
+      pm.test("Response should not expose raw SQL or stack trace", function () {
+          var body = pm.response.text();
+          pm.expect(body).to.not.include("syntax error");
+          pm.expect(body).to.not.include("traceback");
+          pm.expect(body).to.not.include("exception");
+      });

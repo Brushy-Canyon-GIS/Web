@@ -1,0 +1,22 @@
+$kind: http-request
+name: Crossplot Info
+method: GET
+url: '{{base_url}}/crossplot'
+headers:
+  - key: X-API-Key
+    value: '{{api_key}}'
+order: 3000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has name, version, endpoints fields", function () {
+          var data = pm.response.json();
+          pm.expect(data).to.have.property("name");
+          pm.expect(data).to.have.property("version");
+          pm.expect(data).to.have.property("endpoints");
+      });
