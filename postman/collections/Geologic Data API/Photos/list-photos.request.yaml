@@ -1,0 +1,40 @@
+$kind: http-request
+name: List Photos
+method: GET
+url: '{{base_url}}{{api_prefix}}/photos'
+headers:
+  - key: X-API-Key
+    value: '{{api_key}}'
+order: 1000
+queryParams:
+  - key: limit
+    value: '5'
+  - key: offset
+    value: '0'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has photos array and total number", function () {
+          var data = pm.response.json();
+          pm.expect(data).to.have.property("photos").that.is.an("array");
+          pm.expect(data).to.have.property("total").that.is.a("number");
+      });
+
+      pm.test("photos.length <= 5 (respects limit)", function () {
+          var data = pm.response.json();
+          pm.expect(data.photos.length).to.be.at.most(5);
+      });
+
+      pm.test("Each photo has id, name, geometry", function () {
+          var data = pm.response.json();
+          data.photos.forEach(function (photo) {
+              pm.expect(photo).to.have.property("id");
+              pm.expect(photo).to.have.property("name");
+              pm.expect(photo).to.have.property("geometry");
+          });
+      });

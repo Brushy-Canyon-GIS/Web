@@ -1,0 +1,30 @@
+$kind: http-request
+name: 'Get Table Info'
+method: GET
+url: '{{base_url}}{{api_prefix}}/geologic/tables/:table_name'
+headers:
+  - key: X-API-Key
+    value: '{{api_key}}'
+order: 2000
+pathVariables:
+  - key: table_name
+    value: atlas_maps
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has name field", function () {
+          var data = pm.response.json();
+          pm.expect(data).to.have.property("name");
+      });
+
+      pm.test("Response has feature_count field (number)", function () {
+          var data = pm.response.json();
+          pm.expect(data).to.have.property("feature_count").that.is.a("number");
+      });
+
+      // Note: If the table does not exist, the API will return a 404 status code.

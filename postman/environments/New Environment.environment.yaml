@@ -1,0 +1,6 @@
+name: New Environment
+values:
+  - key: api_key
+    value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml3eXlnY21ndGpyY2xoeXlrYXBmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExNDcyMTgsImV4cCI6MjA3NjcyMzIxOH0.NLL5HhK9baVNC81ySh06fH1wHGvjLCB7cEFWx63PJ6Q'
+    enabled: true
+    type: default

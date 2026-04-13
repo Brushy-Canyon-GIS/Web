@@ -1,0 +1,12 @@
+$kind: http-request
+name: Route Guess - auth table
+method: GET
+url: '{{base_url}}{{api_prefix}}/geologic/auth'
+order: 4000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Should not expose auth table", function () {
+          pm.expect(pm.response.code).to.not.equal(200);
+      });

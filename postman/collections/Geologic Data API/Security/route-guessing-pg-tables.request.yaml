@@ -1,0 +1,19 @@
+$kind: http-request
+name: Route Guess - pg_tables
+method: GET
+url: '{{base_url}}{{api_prefix}}/geologic/pg_tables'
+order: 1000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Should not expose raw DB table pg_tables", function () {
+          pm.expect(pm.response.code).to.not.equal(200);
+      });
+
+      pm.test("Response should not contain SQL error details", function () {
+          var body = pm.response.text();
+          pm.expect(body).to.not.include("syntax error");
+          pm.expect(body).to.not.include("pg_");
+          pm.expect(body).to.not.include("relation");
+      });

@@ -1,0 +1,19 @@
+$kind: http-request
+name: Route Guess - information_schema
+method: GET
+url: '{{base_url}}{{api_prefix}}/geologic/information_schema'
+order: 2000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Should not expose information_schema", function () {
+          pm.expect(pm.response.code).to.not.equal(200);
+      });
+
+      pm.test("Response should not contain schema metadata", function () {
+          var body = pm.response.text();
+          pm.expect(body).to.not.include("information_schema");
+          pm.expect(body).to.not.include("column_name");
+          pm.expect(body).to.not.include("table_name");
+      });

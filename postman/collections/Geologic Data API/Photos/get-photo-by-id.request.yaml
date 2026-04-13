@@ -1,0 +1,31 @@
+$kind: http-request
+name: Get Photo by ID
+method: GET
+url: '{{base_url}}{{api_prefix}}/photos/:photo_id'
+headers:
+  - key: X-API-Key
+    value: '{{api_key}}'
+order: 3000
+pathVariables:
+  - key: photo_id
+    value: '350'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has id, name, hyperlink, properties", function () {
+          var data = pm.response.json();
+          pm.expect(data).to.have.property("id");
+          pm.expect(data).to.have.property("name");
+          pm.expect(data).to.have.property("hyperlink");
+          pm.expect(data).to.have.property("properties");
+      });
+
+      pm.test("data.id === 350", function () {
+          var data = pm.response.json();
+          pm.expect(data.id).to.eql(350);
+      });

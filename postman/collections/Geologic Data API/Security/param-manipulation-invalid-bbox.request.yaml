@@ -1,0 +1,23 @@
+$kind: http-request
+name: Param Manipulation - Invalid bbox
+method: GET
+url: '{{base_url}}{{api_prefix}}/geologic/atlas_maps/filter'
+order: 7000
+queryParams:
+  - key: bbox
+    value: invalid_string
+  - key: limit
+    value: '5'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Invalid bbox should return 400 or 422", function () {
+          pm.expect([400, 422]).to.include(pm.response.code);
+      });
+
+      pm.test("Response should not expose raw SQL", function () {
+          var body = pm.response.text();
+          pm.expect(body).to.not.include("syntax error");
+          pm.expect(body).to.not.include("traceback");
+      });

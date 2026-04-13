@@ -14,7 +14,9 @@ from app.models.geologic import (
 from app.services.geologic_service import GeologicDataService
 
 
-router = APIRouter(prefix="/geologic", tags=["Geologic Data"])
+from app.auth import require_api_key
+
+router = APIRouter(prefix="/geologic", tags=["Geologic Data"], dependencies=[Depends(require_api_key)])
 
 
 def get_service() -> GeologicDataService:
@@ -65,7 +67,7 @@ async def get_table_info(
 )
 async def get_features(
     table_name: str,
-    limit: Optional[int] = Query(None, ge=1, description="Maximum number of features to return (None = no limit)"),
+    limit: Optional[int] = Query(None, ge=1, le=1000, description="Maximum number of features to return (max 1000)"),
     offset: int = Query(0, ge=0, description="Number of features to skip"),
     service: GeologicDataService = Depends(get_service)
 ):

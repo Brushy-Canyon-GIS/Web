@@ -1,0 +1,27 @@
+$kind: http-request
+name: Root
+method: GET
+url: '{{base_url}}/'
+headers:
+  - key: X-API-Key
+    value: '{{api_key}}'
+order: 1000
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response has name, version, endpoints fields", function () {
+          var data = pm.response.json();
+          pm.expect(data).to.have.property("name");
+          pm.expect(data).to.have.property("version");
+          pm.expect(data).to.have.property("endpoints");
+      });
+
+      pm.test("data.name === 'Geologic Data API'", function () {
+          var data = pm.response.json();
+          pm.expect(data.name).to.eql("Geologic Data API");
+      });

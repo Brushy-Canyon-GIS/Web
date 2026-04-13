@@ -1,0 +1,8 @@
+$kind: collection
+name: Geologic Data API
+description: API for accessing geologic data, photos, and cross plots
+variables:
+  - key: base_url
+    value: 'http://localhost:8000'
+  - key: api_prefix
+    value: '/api/v1'

@@ -1,0 +1,14 @@
+$kind: http-request
+name: No Auth Token - Geologic Tables
+method: GET
+url: '{{base_url}}{{api_prefix}}/geologic/tables'
+order: 9000
+auth:
+  type: noauth
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("⚠️ WARNING: Endpoint accessible without auth token (expected 401/403, got " + pm.response.code + ")", function () {
+          pm.expect(pm.response.code, "SECURITY GAP: Endpoint returns 200 without any auth token. Add authentication middleware.").to.be.oneOf([401, 403]);
+      });

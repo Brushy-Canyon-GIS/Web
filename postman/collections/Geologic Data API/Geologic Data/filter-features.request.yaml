@@ -1,0 +1,40 @@
+$kind: http-request
+name: Filter Features
+method: GET
+url: '{{base_url}}{{api_prefix}}/geologic/:table_name/filter'
+headers:
+  - key: X-API-Key
+    value: '{{api_key}}'
+order: 4000
+pathVariables:
+  - key: table_name
+    value: atlas_maps
+queryParams:
+  - key: limit
+    value: '5'
+  - key: offset
+    value: '0'
+  - key: bbox
+    value: '-105,31,-104,32'
+scripts:
+  - type: afterResponse
+    language: text/javascript
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+
+      pm.test("Response type is FeatureCollection", function () {
+          var data = pm.response.json();
+          pm.expect(data.type).to.eql("FeatureCollection");
+      });
+
+      pm.test("Response has features array", function () {
+          var data = pm.response.json();
+          pm.expect(data).to.have.property("features").that.is.an("array");
+      });
+
+      pm.test("features.length <= 5 (respects limit)", function () {
+          var data = pm.response.json();
+          pm.expect(data.features.length).to.be.at.most(5);
+      });
