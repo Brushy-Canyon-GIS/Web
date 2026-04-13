@@ -27,8 +27,7 @@ type Layer =
   | "gis_region_small"
   | "gradient_regions"
   | "patterns"
-  | "cutoffmeasuredsections"
-  | "continent_tests";
+  | "cutoffmeasuredsections";
 
 const normalize = (str: string) =>
   str

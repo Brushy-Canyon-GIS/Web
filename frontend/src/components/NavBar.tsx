@@ -16,8 +16,7 @@ type Layer =
   | "gis_region_small"
   | "gradient_regions"
   | "patterns"
-  | "cutoffmeasuredsections"
-  | "continent_tests";
+  | "cutoffmeasuredsections";
 
 interface NavBarProps {
   selectedLayers: Layer[];
@@ -40,7 +39,6 @@ const NavBar: React.FC<NavBarProps> = ({ selectedLayers, handleLayerChange }) =>
     { key: "gis_region_small", label: "Small GIS Regions" },
     { key: "gradient_regions", label: "Gradient Regions" },
     { key: "patterns", label: "Patterns" },
-    { key: "continent_tests", label: "Continent Tests"}
     // { key: "cutoffmeasuredsections", label: "Cut Off Measured Sections" },
   ];
 
