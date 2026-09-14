@@ -7,7 +7,7 @@ load_dotenv()
 
 from .database import database
 from .config import settings
-from .routers import geologic_router, photos_router, cross_plot_router
+from .routers import geologic_router, photos_router, cross_plot_router, tiles_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -54,6 +54,7 @@ app = FastAPI(
 app.include_router(geologic_router, prefix=settings.api_v1_prefix)
 app.include_router(photos_router, prefix=settings.api_v1_prefix)
 app.include_router(cross_plot_router, prefix=settings.api_v1_prefix)
+app.include_router(tiles_router, prefix=settings.api_v1_prefix)
 
 @app.get("/", tags=["Root"])
 async def root():
