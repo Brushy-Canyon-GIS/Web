@@ -32,6 +32,10 @@ MIN_FEATURES="${MIN_FEATURES:-2000}"
 
 READY_TIMEOUT="${READY_TIMEOUT:-60}"
 
+# A tile known to fall inside the mapped area, used to prove rendering works.
+TILE_LAYER="${TILE_LAYER:-fan_geology}"
+TILE_ZXY="${TILE_ZXY:-12/856/1667}"
+
 CHECK_ONLY=0
 FORCE=0
 for arg in "$@"; do
@@ -113,6 +117,24 @@ check_bound_to_loopback() {
   ok "port 8000 bound to loopback only ($listeners)"
 }
 
+check_tiles_render() {
+  local ct code
+  ct="$(curl -s -o /dev/null -m 90 -w '%{content_type} %{http_code}' \
+        "$BASE_URL/api/v1/tiles/$(_tile_version)/r/$TILE_LAYER/$TILE_ZXY.png" || true)"
+  code="${ct##* }"
+  if [[ "$code" == "200" && "$ct" == image/png* ]]; then
+    ok "tile renders: $TILE_LAYER/$TILE_ZXY -> image/png"
+  else
+    bad "tile request returned: ${ct:-no response}"
+    return 1
+  fi
+}
+
+_tile_version() {
+  curl -fsS -m 15 "$BASE_URL/api/v1/tiles/manifest.json" 2>/dev/null \
+    | python3 -c 'import sys,json; print(json.load(sys.stdin)["version"])' 2>/dev/null || echo 1
+}
+
 run_checks() {
   local failed=0
   check_health              || failed=1
@@ -120,6 +142,7 @@ run_checks() {
   check_single_cors_header  || failed=1
   check_not_truncated       || failed=1
   check_bound_to_loopback   || failed=1
+  check_tiles_render        || failed=1
   return $failed
 }
 
