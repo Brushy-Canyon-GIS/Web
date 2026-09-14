@@ -12,6 +12,7 @@ from app.models.geologic import (
     TableInfo
 )
 from app.services.geologic_service import GeologicDataService
+from app.utils.query_builder import MAX_FEATURE_LIMIT
 
 
 from app.auth import require_api_key
@@ -71,7 +72,7 @@ async def get_table_info(
 )
 async def get_features(
     table_name: str,
-    limit: Optional[int] = Query(None, ge=1, le=1000, description="Maximum number of features to return (max 1000)"),
+    limit: Optional[int] = Query(None, ge=1, le=MAX_FEATURE_LIMIT, description=f"Maximum number of features to return (max {MAX_FEATURE_LIMIT}; omitted = server maximum)"),
     offset: int = Query(0, ge=0, description="Number of features to skip"),
     service: GeologicDataService = Depends(get_service)
 ):

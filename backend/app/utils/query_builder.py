@@ -6,6 +6,14 @@ from typing import Dict, List, Tuple, Any, Optional
 from app.models.geologic import FilterParams, BoundingBox
 
 
+# Hard ceiling on features returned by a single query. Enforced here rather than
+# only in the routers, because an unset limit reaches SQL as `LIMIT NULL`, which
+# Postgres treats as no limit at all — one request would return an entire table.
+# 5000 sits above the largest table (fan_geology, ~2151 rows), so callers that
+# fetch a whole layer are unaffected.
+MAX_FEATURE_LIMIT = 5000
+
+
 def build_geojson_query(
     table_name: str,
     geometry_column: str = "geometry",
@@ -70,9 +78,11 @@ def build_geojson_query(
     ) t
     """
     
-    # Add pagination parameters
-    params['limit'] = filters.limit if filters else 100
-    params['offset'] = filters.offset if filters else 0
+    # Add pagination parameters. A None limit must never reach SQL — see
+    # MAX_FEATURE_LIMIT above.
+    requested_limit = filters.limit if filters and filters.limit is not None else MAX_FEATURE_LIMIT
+    params['limit'] = min(requested_limit, MAX_FEATURE_LIMIT)
+    params['offset'] = max(filters.offset, 0) if filters else 0
     
     return query, params
 
