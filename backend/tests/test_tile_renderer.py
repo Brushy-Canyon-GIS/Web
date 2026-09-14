@@ -81,6 +81,34 @@ def test_palette_loads():
     assert len(palette) > 50
 
 
+def test_palette_matches_the_frontend_copy():
+    """
+    The renderer and the browser must colour the same cycle identically.
+    Until the frontend reads the palette from /tiles/manifest.json there are
+    two copies of this file, and they have to stay in step.
+    """
+    import json
+    from pathlib import Path
+
+    backend_copy = Path(__file__).resolve().parents[1] / "app" / "cartography" / "fan_geology_colors.json"
+    frontend_copy = Path(__file__).resolve().parents[2] / "frontend" / "src" / "fanGeology.json"
+
+    if not frontend_copy.exists():  # backend deployed on its own
+        pytest.skip("frontend sources not present")
+
+    with backend_copy.open() as fh:
+        assert json.load(fh) == json.loads(frontend_copy.read_text())
+
+
+@pytest.mark.parametrize("cycle", ["3-4", "4-5", "5.0", "6.0", "7.0"])
+def test_cycles_mangled_by_excel_have_colours(cycle):
+    """
+    These five keys reached the palette as '4-Mar', '5-Apr', '5', '6' and '7'
+    after a trip through a spreadsheet, so the units they name rendered grey.
+    """
+    assert cycle in cycle_palette()
+
+
 def _open(png: bytes) -> Image.Image:
     return Image.open(io.BytesIO(png)).convert("RGBA")
 
