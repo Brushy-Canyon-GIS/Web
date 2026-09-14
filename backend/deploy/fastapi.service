@@ -1,0 +1,26 @@
+[Unit]
+Description=FastAPI App
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/geology-backend/backend
+
+EnvironmentFile=/home/ubuntu/geology-backend/backend/.env
+
+# Bound to loopback on purpose: nginx terminates TLS and applies CORS and rate
+# limits, and binding 0.0.0.0 would let anyone reach the API unencrypted on the
+# instance IP, bypassing all of it.
+ExecStart=/home/ubuntu/geology-backend/backend/venv/bin/gunicorn \
+    -k uvicorn.workers.UvicornWorker app.main:app \
+    --bind 127.0.0.1:8000 \
+    --workers 2 \
+    --log-level info
+
+# Only restart on real failure
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
