@@ -42,6 +42,8 @@ SELECT count(*) FROM assets;
 | File | What |
 |---|---|
 | `001_assets.sql` | `feature_layers`, `assets`, `asset_links` — the media schema |
+| `002_backfill_assets.sql` | Moves the 59 `photos` rows into `assets`, links them to `photo_panels` |
+| `003_layer_render_mode.sql` | Adds `feature_layers.render_mode` — raster vs vector per layer |
 
 ## Notes
 
