@@ -21,7 +21,7 @@ class FilterParams(BaseModel):
     Query parameters for filtering geologic features.
     """
     # Pagination
-    limit: Optional[int] = Field(None, ge=1, description="Maximum number of features to return (None = no limit)")
+    limit: Optional[int] = Field(None, ge=1, description="Maximum number of features to return (None = server maximum)")
     offset: int = Field(0, description="Number of features to skip", ge=0)
     
     # Spatial filter

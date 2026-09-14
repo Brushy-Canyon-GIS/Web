@@ -12,11 +12,16 @@ from app.models.geologic import (
     TableInfo
 )
 from app.services.geologic_service import GeologicDataService
+from app.utils.query_builder import MAX_FEATURE_LIMIT
 
 
 from app.auth import require_api_key
 
-router = APIRouter(prefix="/geologic", tags=["Geologic Data"], dependencies=[Depends(require_api_key)])
+# require_api_key is intentionally not applied yet: no API_KEY is set in the
+# production environment, so the check accepts any non-empty header value while
+# blocking the frontend, which sends none. Re-apply once a key is issued and the
+# frontend sends it (and nginx allows X-API-Key through preflight).
+router = APIRouter(prefix="/geologic", tags=["Geologic Data"])
 
 
 def get_service() -> GeologicDataService:
@@ -67,7 +72,7 @@ async def get_table_info(
 )
 async def get_features(
     table_name: str,
-    limit: Optional[int] = Query(None, ge=1, le=1000, description="Maximum number of features to return (max 1000)"),
+    limit: Optional[int] = Query(None, ge=1, le=MAX_FEATURE_LIMIT, description=f"Maximum number of features to return (max {MAX_FEATURE_LIMIT}; omitted = server maximum)"),
     offset: int = Query(0, ge=0, description="Number of features to skip"),
     service: GeologicDataService = Depends(get_service)
 ):
