@@ -51,6 +51,40 @@ was broken. Each check corresponds to a failure that actually happened:
 seconds before gunicorn has imported pandas and matplotlib and begun serving.
 The script polls until the API answers rather than sleeping a fixed interval.
 
+## nginx
+
+`nginx-api.conf` is the site config, tracked here for the same reason as the
+unit file. To apply:
+
+```bash
+sudo cp backend/deploy/nginx-api.conf /etc/nginx/sites-available/api.outcropanalog.com
+sudo ln -sf /etc/nginx/sites-available/api.outcropanalog.com /etc/nginx/sites-enabled/
+sudo rm -f /etc/nginx/sites-enabled/default        # if the stock site is still linked
+sudo mkdir -p /var/cache/nginx/tiles && sudo chown -R www-data:www-data /var/cache/nginx
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+The `ssl_*` lines are managed by Certbot. If a renewal rewrites the live file,
+copy the change back here rather than letting the two diverge.
+
+### Tile cache
+
+Tiles are cached on disk, so a tile is rendered once and afterwards served
+without waking Python — a cold render is 0.4–0.9s and queries the database, a
+cached hit is about a millisecond and does neither. Check which you got:
+
+```bash
+curl -sI "https://api.outcropanalog.com/api/v1/tiles/1/r/fan_geology/12/856/1667.png" \
+  | grep -i x-tile-cache      # MISS on first fetch, HIT after
+```
+
+Cached entries are retired by bumping `TILE_VERSION` in `backend/.env`, which
+changes every tile URL. Tiles are served `immutable`, so that bump is the only
+thing that retires them — do it whenever the mapping or the palette changes.
+
+`max_size` is set to 400m deliberately: the root volume is 7G and was 83% full
+when this was written. Raise it once the volume is grown.
+
 ## Service definition
 
 `fastapi.service` here is the source of truth for the systemd unit. To apply it:
