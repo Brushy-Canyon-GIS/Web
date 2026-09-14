@@ -168,7 +168,13 @@ fi
 
 log "Preflight"
 [[ -d "$REPO/.git" ]] || { red "no git repo at $REPO"; exit 1; }
-sudo -n true 2>/dev/null || { red "needs sudo for systemctl — run 'sudo -v' first"; exit 1; }
+if ! sudo -n true 2>/dev/null; then
+  red "passwordless sudo is required (the deploy restarts $SERVICE via systemctl)."
+  red "  Ubuntu cloud images grant it in /etc/sudoers.d/90-cloud-init-users."
+  red "  The ubuntu account has no password set, so an interactive sudo prompt"
+  red "  cannot be answered -- do not run 'sudo -v'. Check that sudoers file."
+  exit 1
+fi
 
 if [[ -n "$(git -C "$REPO" status --porcelain)" ]]; then
   red "working tree at $REPO is dirty — someone edited files on the instance:"
