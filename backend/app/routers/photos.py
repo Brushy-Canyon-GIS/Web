@@ -11,7 +11,8 @@ from app.services.photos_service import PhotosService
 
 from app.auth import require_api_key
 
-router = APIRouter(prefix="/photos", tags=["Photos"], dependencies=[Depends(require_api_key)])
+# See the note in routers/geologic.py — auth stays off until a key is actually issued.
+router = APIRouter(prefix="/photos", tags=["Photos"])
 
 
 def get_service() -> PhotosService:

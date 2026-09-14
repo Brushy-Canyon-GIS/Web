@@ -16,7 +16,11 @@ from app.services.geologic_service import GeologicDataService
 
 from app.auth import require_api_key
 
-router = APIRouter(prefix="/geologic", tags=["Geologic Data"], dependencies=[Depends(require_api_key)])
+# require_api_key is intentionally not applied yet: no API_KEY is set in the
+# production environment, so the check accepts any non-empty header value while
+# blocking the frontend, which sends none. Re-apply once a key is issued and the
+# frontend sends it (and nginx allows X-API-Key through preflight).
+router = APIRouter(prefix="/geologic", tags=["Geologic Data"])
 
 
 def get_service() -> GeologicDataService:
