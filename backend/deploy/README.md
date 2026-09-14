@@ -57,12 +57,20 @@ The script polls until the API answers rather than sleeping a fixed interval.
 unit file. To apply:
 
 ```bash
+sudo cp /etc/nginx/sites-available/fastapi "/etc/nginx/sites-available/fastapi.bak-$(date +%F)"
 sudo cp backend/deploy/nginx-api.conf /etc/nginx/sites-available/api.outcropanalog.com
 sudo ln -sf /etc/nginx/sites-available/api.outcropanalog.com /etc/nginx/sites-enabled/
-sudo rm -f /etc/nginx/sites-enabled/default        # if the stock site is still linked
+sudo rm -f /etc/nginx/sites-enabled/fastapi   # same server_name -- would collide
 sudo mkdir -p /var/cache/nginx/tiles && sudo chown -R www-data:www-data /var/cache/nginx
 sudo nginx -t && sudo systemctl reload nginx
 ```
+
+Until 2026-09-14 the live config was `sites-available/fastapi`, symlinked as
+`sites-enabled/fastapi`, and a stale unused `sites-available/api.outcropanalog.com`
+sat beside it. Enabling the new file without removing the `fastapi` symlink
+would have left two enabled sites declaring the same `server_name`. Keep the
+stock `default` site: it answers unmatched hosts on port 80 and does not
+conflict.
 
 The `ssl_*` lines are managed by Certbot. If a renewal rewrites the live file,
 copy the change back here rather than letting the two diverge.
