@@ -13,10 +13,14 @@ The repo is checked out at `/home/ubuntu/geology-backend`.
 ## Deploy
 
 ```bash
-sudo -v                                  # cache credentials for systemctl
 cd /home/ubuntu/geology-backend
 ./backend/deploy/deploy.sh
 ```
+
+Do not prefix this with `sudo -v`. The `ubuntu` account has no password set —
+authentication is by SSH key — so an interactive sudo prompt cannot be answered.
+Sudo is already passwordless via `/etc/sudoers.d/90-cloud-init-users`, and the
+script tests for that non-interactively.
 
 The script records the current commit, pulls `production`, reinstalls
 dependencies if `requirements.txt` changed, restarts the service, waits for it
