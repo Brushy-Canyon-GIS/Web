@@ -1,17 +1,17 @@
-import { useEffect, useState } from "react"; // react hooks
-import "./App.css"; // styling
+import { useEffect, useState } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import "./App.css";
 import Map from "./components/Map.tsx";
 import NavBar from "./components/NavBar";
 import Nav from "./components/Nav";
 import FeatureDetails from "./components/FeatureDetails";
 import About from "./components/About";
+import { AdminUsersPanel } from "./components/admin/AdminUsersPanel";
 import CROSS_PLOT_SECTIONS from "./constants/crossPlotSections.ts";
 import PHOTO_PANELS from "./constants/photoPanels.ts";
 
-// base URL for backend API
 const API_BASE = `${import.meta.env.VITE_API_URL ?? "http://localhost:8000"}`;
 
-// valid map layers
 type Layer =
   | "atlas_maps"
   | "fan_geology"
@@ -32,43 +32,31 @@ type Layer =
 const normalize = (str: string) =>
   str
     .toLowerCase()
-    .replace(/\s+/g, "")      // remove spaces
-    .replace(/[_\-]/g, "")    // remove underscores/dashes
+    .replace(/\s+/g, "")
+    .replace(/[_\-]/g, "")
     .trim();
 
-// root component of the application
-function App() {
-  // geoJSON state - data, function to update it
-  const [geojson, setGeojson] = useState<GeoJSON.FeatureCollection | null>(
-    null
-  );
-  // layer state
+function MapWorkspace() {
+  const [geojson, setGeojson] = useState<GeoJSON.FeatureCollection | null>(null);
   const [selectedLayers, setSelectedLayers] = useState<Layer[]>([]);
-
-  // feature state -- stores feature clicked on the map
   const [selectedFeature, setSelectedFeature] = useState<{
     properties: Record<string, any>;
     photoUrl: string | null;
   } | null>(null);
 
-  // layer toggle function
   const handleLayerChange = (layer: Layer) => {
-    // checks if the layer is already selected. If it is, remove it. If not selected, add it
     setSelectedLayers((prev) =>
       prev.includes(layer) ? prev.filter((l) => l !== layer) : [...prev, layer]
     );
   };
 
-  // this runs when selectedLayers change
   useEffect(() => {
-    //defines async function that fetches data from API
     const fetchLayers = async () => {
-      if (selectedLayers.length === 0) { // no layers selected
+      if (selectedLayers.length === 0) {
         setGeojson(null);
         return;
       }
 
-      // create array to store GeoJSON results from each layer
       const layerData: GeoJSON.FeatureCollection[] = [];
 
       for (const layer of selectedLayers) {
@@ -76,7 +64,6 @@ function App() {
           const res = await fetch(`${API_BASE}/api/v1/geologic/${layer}`);
           const data = await res.json();
 
-          // Add __layer and hasCrossPlot
           data.features = (data.features || []).map((feature: any) => ({
             ...feature,
             properties: {
@@ -85,87 +72,86 @@ function App() {
               hasCrossPlot:
                 layer === "measured_sections_all_areas"
                   ? CROSS_PLOT_SECTIONS.some(
-                      s =>
+                      (s) =>
                         normalize(s) ===
                         normalize(
                           feature.properties?.NAME ??
-                          feature.properties?.Name ??
-                          ""
+                            feature.properties?.Name ??
+                            ""
                         )
                     )
                   : false,
-               hasPhoto:
+              hasPhoto:
                 layer === "photo_panels"
                   ? PHOTO_PANELS.some(
-                      s =>
+                      (s) =>
                         normalize(s) ===
                         normalize(
-                          feature.properties?.NAME ?? feature.properties?.Name ?? ""
+                          feature.properties?.NAME ??
+                            feature.properties?.Name ??
+                            ""
                         )
                     )
                   : false,
             },
           }));
-          console.log({ data }); // prints API response to browser console
-          layerData.push(data); // stores this layer's GeoJSON data
-        } catch (error) { // error handling if API request fails
+          layerData.push(data);
+        } catch (error) {
           console.error(`Error fetching ${layer}`, error);
         }
       }
 
-      // creates new GeoJSON object
       const mergedGeojson: GeoJSON.FeatureCollection = {
         type: "FeatureCollection",
         features: layerData.flatMap((fc) => fc.features || []),
       };
 
-      setGeojson(mergedGeojson); // updates state so map re-renders
+      setGeojson(mergedGeojson);
     };
 
-    fetchLayers(); // runs the function
-  }, [selectedLayers]); // dependency array --> run the effect whenever selectedLayers changes
+    void fetchLayers();
+  }, [selectedLayers]);
 
-  console.log({selectedFeature}) // logs currently selected map feature
-
-
-  // returns UI for this component
   return (
-      <>
-        <div className="layout-container">
-          <Nav />
-          <NavBar
-            selectedLayers={selectedLayers} // current layers
-            handleLayerChange={handleLayerChange} // function to toggle layers
-          />
+    <>
+      <div className="layout-container">
+        <Nav />
+        <NavBar
+          selectedLayers={selectedLayers}
+          handleLayerChange={handleLayerChange}
+        />
 
-          {selectedFeature && ( // conditionally render only if feature selected
-            <FeatureDetails
-              properties={selectedFeature.properties} // pass props
-              photoUrl={selectedFeature.photoUrl} // pass photo URL
-              onBack={() => setSelectedFeature(null)} // back button
-            />
-          )}
-        
-          
-          <div className="map-container">
-            <Map
-              geojson={geojson} // pass geoJSON data
-              onFeatureClick={setSelectedFeature} // When user clicks feature, set it
-              showPhotoPanels={selectedLayers.includes("photo_panels")}
-              showCrossPlots={selectedLayers.includes("measured_sections_all_areas")}
-            />
-          </div>
+        {selectedFeature && (
+          <FeatureDetails
+            properties={selectedFeature.properties}
+            photoUrl={selectedFeature.photoUrl}
+            onBack={() => setSelectedFeature(null)}
+          />
+        )}
+
+        <div className="map-container">
         </div>
-        <div
-          id="about-section"
-          style={{
-            scrollMarginTop: "110px", // prevents header overlap
-          }}
-        >
-          <About />
-        </div>
-      </>
-   );
+      </div>
+      <div
+        id="about-section"
+        style={{
+          scrollMarginTop: "110px",
+        }}
+      >
+        <About />
+      </div>
+    </>
+  );
 }
 
-export default App; // exports component so it can be used by the entry point in main.tsx
+function App() {
+  return (
+    <Routes>
+      <Route path="/" element={<MapWorkspace />} />
+      <Route path="/admins" element={<AdminUsersPanel />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+}
+
+export default App;

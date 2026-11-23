@@ -6,6 +6,7 @@ import App from './App';
 import About from './components/About';
 import SignUpForm from './components/SignUpForm';
 import SignInForm from './components/SignInForm';
+import { AdminUsersPanel } from './components/admin/AdminUsersPanel';
 import { AuthProvider } from './contexts/AuthContext';
 
 const router = createBrowserRouter([
@@ -13,8 +14,10 @@ const router = createBrowserRouter([
   { path: '/About', element: <About />},
   { path: '/signin', element: <SignInForm /> },
   { path: '/signup', element: <SignUpForm /> },
+  { path: '/admins', element: <AdminUsersPanel /> },
 ]);
 
+console.log('MAIN MOUNTING')
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthProvider>
