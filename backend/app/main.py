@@ -9,6 +9,8 @@ from .database import database
 from .config import settings
 from .routers import geologic_router, photos_router, cross_plot_router, tiles_router
 
+import os
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
@@ -42,13 +44,14 @@ app = FastAPI(
 # CORS is handled by nginx in production (see /etc/nginx/sites-enabled), which sets
 # a single allowed origin and answers preflight. Enabling it here too sends a second
 # Access-Control-Allow-Origin header, which browsers reject outright.
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=settings.cors_origins,
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+if os.getenv("ENABLE_CORS") == "1":
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.cors_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 # Include routers
 app.include_router(geologic_router, prefix=settings.api_v1_prefix)

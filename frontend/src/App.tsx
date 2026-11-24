@@ -130,6 +130,12 @@ function MapWorkspace() {
         )}
 
         <div className="map-container">
+          <Map
+            geojson={geojson}
+            onFeatureClick={setSelectedFeature}
+            showPhotoPanels={selectedLayers.includes("photo_panels")}
+            showCrossPlots={selectedLayers.includes("measured_sections_all_areas")}
+          />
         </div>
       </div>
       <div

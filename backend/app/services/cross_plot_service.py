@@ -184,7 +184,7 @@ class CrossPlotService:
 
         csv_name = section_name
         facies_values = sorted(section_df["Facies"].unique())
-        cmap = cm.get_cmap("tab20")
+        cmap = plt.colormaps["tab20"]
         n = max(1, len(facies_values))
         facies_color_map = {
             facies: cmap(i / max(1, n - 1)) for i, facies in enumerate(facies_values)
